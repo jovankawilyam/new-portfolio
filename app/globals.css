@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@source "../app/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
 @theme {
   --font-sans: "Inter", "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
 }
