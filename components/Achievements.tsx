@@ -14,7 +14,6 @@ const achievements = [
   "Juara 3 Online Indonesia International Biho Championship - 2021",
   "Juara 1 Speed Kicking - 2021",
   "Juara 2 Kapolri Cup 3 - 2022",
-  "Juara 1 Taekwondo Festival - 2025",
 
 ];
 
