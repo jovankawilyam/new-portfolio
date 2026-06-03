@@ -93,18 +93,8 @@ export default function PortfolioScroll() {
       window.matchMedia(DESKTOP_MEDIA_QUERY).matches;
 
     let drawWidth, drawHeight, offsetX, offsetY;
-    const shouldContain = !isDesktop && canvasAspect > imgAspect;
 
-    if (shouldContain) {
-      drawHeight = canvasHeight;
-      drawWidth = canvasHeight * imgAspect;
-      if (drawWidth > canvasWidth) {
-        drawWidth = canvasWidth;
-        drawHeight = canvasWidth / imgAspect;
-      }
-      offsetX = (canvasWidth - drawWidth) / 2;
-      offsetY = (canvasHeight - drawHeight) / 2;
-    } else if (canvasAspect > imgAspect) {
+    if (canvasAspect > imgAspect) {
       drawWidth = canvasWidth;
       drawHeight = canvasWidth / imgAspect;
       offsetX = 0;
@@ -204,8 +194,12 @@ export default function PortfolioScroll() {
   }, [currentIndex, renderFrame]);
 
   return (
-    <div ref={containerRef} className="relative h-[420svh] bg-neutral-950 md:h-[720vh]">
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden md:h-screen">
+    <div
+      ref={containerRef}
+      data-portfolio-scroll
+      className="relative h-[720svh] bg-neutral-950 md:h-[720vh]"
+    >
+      <div className="sticky top-0 h-[100dvh] min-h-[100svh] w-full overflow-hidden md:h-screen">
         <canvas
           ref={canvasRef}
           className="absolute inset-0 h-full w-full"

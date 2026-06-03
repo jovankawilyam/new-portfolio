@@ -5,6 +5,7 @@ import Stats from "@/components/Stats";
 import Footer from "@/components/Footer";
 import AboutReveal from "@/components/AboutReveal";
 import Achievements from "@/components/Achievements";
+import GamesGrid from "@/components/GamesGrid";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         <BentoGrid />
         {/* <ShowcaseCarousel />  Disabling carousel for now to focus on vertical flow or if needed enable it */}
         <Testimonial />
+        <GamesGrid />
         <Achievements />
         <Stats />
         <Footer />

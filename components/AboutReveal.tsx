@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, MotionValue, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
 function ScrollRevealText({
@@ -12,9 +12,21 @@ function ScrollRevealText({
   className?: string;
 }) {
   const element = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const updateViewport = () => setIsMobile(mediaQuery.matches);
+
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: element,
-    offset: ["start 0.9", "start 0.25"],
+    offset: isMobile ? ["start 0.82", "end 0.42"] : ["start 0.9", "start 0.25"],
   });
 
   const characters = children.split("");

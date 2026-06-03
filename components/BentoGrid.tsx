@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Reveal from "@/components/Reveal";
 
 const projects = [
   {
     title: "Jual Beli Akun PUBGM Marketplace",
     href: "#contact",
-    image: "/bento-1.webp",
+    image: "/images/pubg.png",
     type: "Full Stack",
     tags: ["Laravel", "CRUD", "Auth"],
     description:
@@ -17,7 +17,7 @@ const projects = [
   {
     title: "Litbangku",
     href: "https://www.instagram.com/litbangku_id?igsh=ZXI1ejI1Mmo3dXp1",
-    image: "/bento-2.webp",
+    image: "/images/litbangku.JPG",
     type: "Instagram Program",
     tags: ["Research", "Literacy", "Content"],
     description:
@@ -26,7 +26,7 @@ const projects = [
   {
     title: "Hand Tracking",
     href: "https://hand-tracking-beige.vercel.app",
-    image: "/sequence/00001.jpg",
+    image: "/images/handtracking1.png",
     type: "Computer Vision",
     tags: ["Camera", "AI", "Web"],
     description:
@@ -35,7 +35,7 @@ const projects = [
   {
     title: "Sleep Detect",
     href: "https://sleep-detect.vercel.app",
-    image: "/sequence/00047.jpg",
+    image: "/images/sleepdetected.png",
     type: "AI Experiment",
     tags: ["Python", "Vision", "Web"],
     description:
@@ -44,7 +44,7 @@ const projects = [
   {
     title: "Photobooth Bounty",
     href: "https://photobooth-bounty.vercel.app/",
-    image: "/sequence/00107.jpg",
+    image: "/images/bounty.png",
     type: "Creative Tool",
     tags: ["Camera", "UI", "Photo"],
     description:
@@ -53,7 +53,7 @@ const projects = [
   {
     title: "Seminar Registration",
     href: "https://pendaftaransysfornation.vercel.app/",
-    image: "/sequence/00186.jpg",
+    image: "/images/pendaftaran.png",
     type: "Event System",
     tags: ["Form", "Event", "Web"],
     description:
@@ -62,7 +62,7 @@ const projects = [
   {
     title: "Photobooth Vintage",
     href: "https://photobooth-vintage.vercel.app/",
-    image: "/sequence/00245.jpg",
+    image: "/images/vintage.png",
     type: "Creative Tool",
     tags: ["Camera", "Vintage", "UI"],
     description:
@@ -71,7 +71,7 @@ const projects = [
   {
     title: "Voting Pemira 2025",
     href: "https://voting-pemira2025.vercel.app/",
-    image: "/sequence/00319.jpg",
+    image: "/images/pemilihan.png",
     type: "Campus System",
     tags: ["Voting", "Campus", "Web"],
     description:
@@ -80,7 +80,7 @@ const projects = [
   {
     title: "Valentine Day",
     href: "https://valentine-day-for-nayla.vercel.app/",
-    image: "/sequence/00400.jpg",
+    image: "/images/valentine.png",
     type: "Creative Tool",
     tags: ["Interactive", "Story", "Web"],
     description:
@@ -89,25 +89,15 @@ const projects = [
   {
     title: "Absensi Sederhana",
     href: "https://absensi-brown.vercel.app/",
-    image: "/bento-3.webp",
+    image: "/images/absensi.png",
     type: "Absensi",
     tags: ["Form", "Absensi", "Web"],
     description:
       "Simple attendance registration form with a clean and modern interface.",
   },
-  {
-    title: "Neon Hand Hockey",
-    href: "https://gameneonhandhockey-byjovanka.vercel.app/",
-    image: "/sequence/00480.jpg",
-    type: "Game",
-    tags: ["Game", "Neon", "Web"],
-    description:
-      "Interactive neon-themed hand hockey game with fast-paced gameplay and vibrant visuals.",
-  },
 ];
 
-const DESKTOP_INITIAL_PROJECT_COUNT = 6;
-const MOBILE_INITIAL_PROJECT_COUNT = 3;
+const INITIAL_PROJECT_COUNT = 6;
 
 function isExternalLink(href: string) {
   return href.startsWith("http");
@@ -115,26 +105,12 @@ function isExternalLink(href: string) {
 
 export default function BentoGrid() {
   const [showAllProjects, setShowAllProjects] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const initialProjectCount = isMobile
-    ? MOBILE_INITIAL_PROJECT_COUNT
-    : DESKTOP_INITIAL_PROJECT_COUNT;
   const visibleProjects = useMemo(
     () =>
-      showAllProjects ? projects : projects.slice(0, initialProjectCount),
-    [initialProjectCount, showAllProjects],
+      showAllProjects ? projects : projects.slice(0, INITIAL_PROJECT_COUNT),
+    [showAllProjects],
   );
-  const hiddenProjectCount = projects.length - initialProjectCount;
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 639px)");
-    const updateViewport = () => setIsMobile(mediaQuery.matches);
-
-    updateViewport();
-    mediaQuery.addEventListener("change", updateViewport);
-
-    return () => mediaQuery.removeEventListener("change", updateViewport);
-  }, []);
+  const hiddenProjectCount = projects.length - INITIAL_PROJECT_COUNT;
 
   return (
     <section
