@@ -1,6 +1,11 @@
 "use client";
 
-import { motion, MotionValue, useScroll, useTransform } from "motion/react";
+import {
+  motion,
+  MotionValue,
+  useScroll,
+  useTransform,
+} from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
@@ -118,21 +123,19 @@ export default function AboutReveal() {
           </ScrollRevealText>
           <div className="grid gap-4 md:grid-cols-2 md:gap-6">
             <div className="space-y-3">
-              {leftSkills.map((skill, index) => (
+              {leftSkills.map((skill) => (
                 <SkillCard
                   key={skill.name}
                   {...skill}
-                  delay={index * 0.16}
                   direction="left"
                 />
               ))}
             </div>
             <div className="space-y-3">
-              {rightSkills.map((skill, index) => (
+              {rightSkills.map((skill) => (
                 <SkillCard
                   key={skill.name}
                   {...skill}
-                  delay={index * 0.16 + 0.12}
                   direction="right"
                 />
               ))}
@@ -155,6 +158,12 @@ export default function AboutReveal() {
               >
                 View Projects
               </a>
+              <a
+                href="#games"
+                className="rounded-full border border-white/15 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:border-amber-500 hover:text-amber-500"
+              >
+                View Games
+              </a>
             </div>
           </Reveal>
         </div>
@@ -166,30 +175,30 @@ export default function AboutReveal() {
 function SkillCard({
   name,
   detail,
-  delay,
   direction,
 }: {
   name: string;
   detail: string;
-  delay: number;
   direction: "left" | "right";
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.96", "start 0.54"],
+  });
+  const opacity = useTransform(scrollYProgress, [0, 0.28, 1], [0, 0.9, 1]);
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [direction === "left" ? -120 : 120, 0],
+  );
+  const blur = useTransform(scrollYProgress, [0, 1], ["blur(10px)", "blur(0px)"]);
+
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        x: direction === "left" ? -120 : 120,
-        filter: "blur(10px)",
-      }}
-      whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-18%" }}
-      transition={{
-        duration: 1.05,
-        delay,
-        ease: [0.16, 1, 0.3, 1],
-        filter: { duration: 0.8 },
-      }}
-      className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-left transition hover:-translate-y-1 hover:border-amber-500/70 hover:bg-amber-500/10"
+      ref={ref}
+      style={{ opacity, x, filter: blur }}
+      className="group flex origin-center transform-gpu items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-left transition hover:-translate-y-1 hover:border-amber-500/70 hover:bg-amber-500/10"
     >
       <span className="text-lg font-black tracking-tight text-white">{name}</span>
       <span className="text-sm font-medium text-neutral-400 transition group-hover:text-amber-200">
