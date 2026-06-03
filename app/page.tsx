@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className="bg-neutral-950 min-h-screen">
       <PortfolioScroll />
-      <div className="relative z-10 bg-neutral-950 -mt-[100vh]">
+      <div className="relative z-10 -mt-[100svh] bg-neutral-950 md:-mt-[100vh]">
         <AboutReveal />
         <BentoGrid />
         {/* <ShowcaseCarousel />  Disabling carousel for now to focus on vertical flow or if needed enable it */}

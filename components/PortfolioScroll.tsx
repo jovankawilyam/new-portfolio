@@ -12,6 +12,7 @@ import clsx from "clsx";
 
 const FRAME_COUNT = 96;
 const FRAME_STEP = 2;
+const DESKTOP_MEDIA_QUERY = "(min-width: 768px)";
 
 function getFrameSrc(index: number) {
   const sourceIndex = ((index - 1) * FRAME_STEP + 1).toString().padStart(5, "0");
@@ -76,51 +77,49 @@ export default function PortfolioScroll() {
 
     lastRenderedIndexRef.current = index;
 
-    // Responsive cover scale (Fill Screen)
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    // Clear canvas
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    if (!canvasWidth || !canvasHeight) return;
 
-    // Calculate aspect ratio
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.fillStyle = "#0a0a0a";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
     const imgAspect = img.width / img.height;
     const canvasAspect = canvasWidth / canvasHeight;
+    const isDesktop =
+      typeof window !== "undefined" &&
+      window.matchMedia(DESKTOP_MEDIA_QUERY).matches;
 
     let drawWidth, drawHeight, offsetX, offsetY;
+    const shouldContain = !isDesktop && canvasAspect > imgAspect;
 
-    // Cover Logic:
-    // If canvas is wider than image (relative to aspect), we fit width and crop height?
-    // Wait, cover means:
-    // If canvasAspect > imgAspect (Canvas is wider), we need to match Width, and Height depends on aspect.
-    // drawWidth = canvasWidth. drawHeight = canvasWidth / imgAspect.
-    // If drawHeight < canvasHeight (which it will be if canvas is VERY wide), then we have gaps.
-    // So if canvas is wider than image aspect, we must scale by Width to fill width, but does height cover?
-    // imgAspect = w/h.
-    // If canvasAspect > imgAspect, then canvas is relatively wider.
-    // Example: Image 1:1. Canvas 2:1.
-    // If we match width, drawHeight = 2/1 = 2. Canvas Height 1. So it covers. Correct.
-
-    if (canvasAspect > imgAspect) {
-      // Canvas is wider/flatter than image
-      // Match Width
+    if (shouldContain) {
+      drawHeight = canvasHeight;
+      drawWidth = canvasHeight * imgAspect;
+      if (drawWidth > canvasWidth) {
+        drawWidth = canvasWidth;
+        drawHeight = canvasWidth / imgAspect;
+      }
+      offsetX = (canvasWidth - drawWidth) / 2;
+      offsetY = (canvasHeight - drawHeight) / 2;
+    } else if (canvasAspect > imgAspect) {
       drawWidth = canvasWidth;
       drawHeight = canvasWidth / imgAspect;
       offsetX = 0;
       offsetY = (canvasHeight - drawHeight) / 2;
     } else {
-      // Canvas is taller/thinner than from image
-      // Match Height
       drawHeight = canvasHeight;
       drawWidth = canvasHeight * imgAspect;
       offsetX = (canvasWidth - drawWidth) / 2;
       offsetY = 0;
     }
 
-    // Optional: Draw background color if needed to fill gaps?
-    // Assuming body background handles it, or we draw bg here.
-    // ctx.fillStyle = "#000"; // Fallback
-    // ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    if (isDesktop && drawHeight > canvasHeight) {
+      const verticalShift = canvasHeight * 0.08;
+      offsetY = Math.min(0, offsetY + verticalShift);
+    }
 
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
   }, []);
@@ -178,9 +177,12 @@ export default function PortfolioScroll() {
   // Handle Resize
   useEffect(() => {
     const handleResize = () => {
-      if (canvasRef.current) {
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const { width, height } = canvas.getBoundingClientRect();
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(width * pixelRatio);
+        canvas.height = Math.round(height * pixelRatio);
         // Re-render current frame
         const current = currentIndex.get();
         const safeIndex = Math.min(
@@ -192,14 +194,18 @@ export default function PortfolioScroll() {
     };
 
     window.addEventListener("resize", handleResize);
+    window.visualViewport?.addEventListener("resize", handleResize);
     handleResize(); // Initial size
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.visualViewport?.removeEventListener("resize", handleResize);
+    };
   }, [currentIndex, renderFrame]);
 
   return (
-    <div ref={containerRef} className="relative h-[300vh] bg-neutral-950">
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+    <div ref={containerRef} className="relative h-[420svh] bg-neutral-950 md:h-[720vh]">
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden md:h-screen">
         <canvas
           ref={canvasRef}
           className="absolute inset-0 h-full w-full"

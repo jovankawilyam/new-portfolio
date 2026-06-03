@@ -1,10 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Reveal from "@/components/Reveal";
 
-const projectLinks = [
+const projects = [
+  {
+    title: "Jual Beli Akun PUBGM Marketplace",
+    href: "#contact",
+    image: "/bento-1.webp",
+    type: "Full Stack",
+    tags: ["Laravel", "CRUD", "Auth"],
+    description:
+      "Marketplace web app with authentication, dynamic search, filtering, and responsive UI.",
+  },
+  {
+    title: "Litbangku",
+    href: "https://www.instagram.com/litbangku_id?igsh=ZXI1ejI1Mmo3dXp1",
+    image: "/bento-2.webp",
+    type: "Instagram Program",
+    tags: ["Research", "Literacy", "Content"],
+    description:
+      "Literacy mapping, research-based planning, and community empowerment content.",
+  },
   {
     title: "Hand Tracking",
     href: "https://hand-tracking-beige.vercel.app",
@@ -59,280 +77,107 @@ const projectLinks = [
     description:
       "Student election voting platform focused on transparent and accessible participation.",
   },
+  {
+    title: "Valentine Day",
+    href: "https://valentine-day-for-nayla.vercel.app/",
+    image: "/sequence/00400.jpg",
+    type: "Creative Tool",
+    tags: ["Interactive", "Story", "Web"],
+    description:
+      "Interactive Valentine's Day surprise website with dynamic visual storytelling.",
+  },
+  {
+    title: "Absensi Sederhana",
+    href: "https://absensi-brown.vercel.app/",
+    image: "/bento-3.webp",
+    type: "Absensi",
+    tags: ["Form", "Absensi", "Web"],
+    description:
+      "Simple attendance registration form with a clean and modern interface.",
+  },
+  {
+    title: "Neon Hand Hockey",
+    href: "https://gameneonhandhockey-byjovanka.vercel.app/",
+    image: "/sequence/00480.jpg",
+    type: "Game",
+    tags: ["Game", "Neon", "Web"],
+    description:
+      "Interactive neon-themed hand hockey game with fast-paced gameplay and vibrant visuals.",
+  },
 ];
 
+const DESKTOP_INITIAL_PROJECT_COUNT = 6;
+const MOBILE_INITIAL_PROJECT_COUNT = 3;
+
+function isExternalLink(href: string) {
+  return href.startsWith("http");
+}
+
 export default function BentoGrid() {
-  const [activeProject, setActiveProject] = useState(0);
-  const currentProject = projectLinks[activeProject];
+  const [showAllProjects, setShowAllProjects] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const initialProjectCount = isMobile
+    ? MOBILE_INITIAL_PROJECT_COUNT
+    : DESKTOP_INITIAL_PROJECT_COUNT;
+  const visibleProjects = useMemo(
+    () =>
+      showAllProjects ? projects : projects.slice(0, initialProjectCount),
+    [initialProjectCount, showAllProjects],
+  );
+  const hiddenProjectCount = projects.length - initialProjectCount;
 
-  const showProjectSlide = (index: number) => {
-    setActiveProject(index);
-    document.getElementById("project-slider")?.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
-  };
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+    const updateViewport = () => setIsMobile(mediaQuery.matches);
 
-  const nextProject = () => {
-    setActiveProject((current) => (current + 1) % projectLinks.length);
-  };
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
 
-  const previousProject = () => {
-    setActiveProject(
-      (current) => (current - 1 + projectLinks.length) % projectLinks.length,
-    );
-  };
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
 
   return (
     <section
       id="projects"
-      className="bg-neutral-950 py-48 px-4 md:px-8 relative z-20 rounded-t-3xl border-t border-white/5"
+      className="relative z-20 bg-neutral-950 px-4 py-24 sm:px-6 md:px-8 md:py-36"
     >
       <div className="mx-auto max-w-7xl">
         <Reveal>
-          <div className="mb-16 text-center">
-            <p className="mb-4 text-sm font-bold uppercase tracking-[0.35em] text-amber-500">
-              Click to explore
-            </p>
-            <h2 className="text-4xl font-bold text-white md:text-8xl tracking-tight leading-none">
-              SELECTED <span className="text-amber-500">PROJECTS</span>
-            </h2>
-          </div>
-        </Reveal>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:grid-rows-2 h-auto md:h-[600px]">
-          {/* Large Card */}
-          <Reveal className="col-span-1 row-span-1 h-full md:col-span-2 md:row-span-2">
-            <a
-              href="#contact"
-              className="group relative block h-[400px] overflow-hidden rounded-3xl bg-neutral-900 text-white transition duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10 md:h-full"
-            >
-              <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent z-10" />
-              <div className="absolute right-6 top-6 z-20 rounded-full border border-white/20 bg-black/40 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white backdrop-blur">
-                Ask for demo
-              </div>
-              <div className="absolute bottom-0 left-0 p-8 z-20">
-                <div className="mb-4 flex flex-wrap gap-2">
-                  {["Laravel", "CRUD", "Auth"].map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-200"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <h3 className="text-3xl font-bold mb-3">
-                  Jual Beli Akun PUBGM <br />
-                  Marketplace
-                </h3>
-                <p className="mb-5 max-w-md text-neutral-300">
-                  Full-stack web-based marketplace using Laravel with CRUD,
-                  authentication, dynamic search, filtering, and responsive UI.
-                </p>
-                <span className="inline-flex items-center gap-2 font-bold text-amber-500">
-                  Contact for project details
-                  <span className="transition-transform group-hover:translate-x-1">
-                    -&gt;
-                  </span>
-                </span>
-              </div>
-              <Image
-                src="/bento-1.webp"
-                alt="Jual Beli Akun PUBGM project preview"
-                fill
-                priority
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            </a>
-          </Reveal>
-
-          {/* Small Card 1 */}
-          <Reveal
-            delay={0.1}
-            className="col-span-1 h-full"
-          >
-            <a
-              href="https://www.instagram.com/litbangku_id?igsh=ZXI1ejI1Mmo3dXp1"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative flex h-[300px] flex-col justify-end overflow-hidden rounded-3xl bg-neutral-900 p-8 text-white transition duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10 md:h-full"
-            >
-              <span className="relative z-10 mb-3 text-xs font-bold uppercase tracking-widest text-amber-500">
-                Instagram Program
-              </span>
-              <h3 className="text-2xl font-bold mb-2 relative z-10">
-                Litbangku
-              </h3>
-              <p className="text-sm text-neutral-300 relative z-10">
-                Initiated literacy mapping, research-based planning, and
-                community empowerment content for financial literacy awareness.
+          <div className="mb-10 flex flex-col gap-5 md:mb-14 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-4xl">
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-amber-500 sm:text-sm">
+                Click to open
               </p>
-              <span className="relative z-10 mt-5 font-bold text-amber-500">
-                Open page -&gt;
-              </span>
-              <Image
-                src="/bento-2.webp"
-                alt="Litbangku project preview"
-                fill
-                sizes="(min-width: 768px) 25vw, 100vw"
-                className="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-neutral-900/50 z-0" />
-            </a>
-          </Reveal>
-
-          {/* Small Card 2 */}
-          <Reveal
-            delay={0.2}
-            className="group relative col-span-1 h-[300px] overflow-hidden rounded-3xl bg-amber-600 p-8 flex flex-col justify-center items-center text-center md:h-full transition duration-500 hover:-translate-y-2 hover:bg-amber-500"
-          >
-            <h3 className="text-6xl font-black text-black mb-2 tracking-tighter">
-              3+
-            </h3>
-            <p className="text-black/80 font-bold uppercase tracking-widest text-xs">
-              Core Focus Areas
-            </p>
-            <p className="mt-5 max-w-48 text-sm font-semibold leading-relaxed text-black/70">
-              Web development, data analytics, and creative leadership.
-            </p>
-          </Reveal>
-
-          {/* Wide Card */}
-          <Reveal
-            delay={0.3}
-            className="col-span-1 h-full md:col-span-2"
-          >
-            <button
-              type="button"
-              onClick={() => showProjectSlide(activeProject)}
-              className="group relative flex h-[300px] w-full items-end overflow-hidden rounded-3xl bg-neutral-900 p-8 text-left text-white transition duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10 md:h-full"
-            >
-              <div className="relative z-10 max-w-sm">
-                <h3 className="text-2xl font-bold mb-2">AI & Web Projects</h3>
-                <p className="text-neutral-300">
-                  Shipped camera-based experiments, event registration flows,
-                  photobooth tools, and digital voting experiences.
-                </p>
-                <span className="mt-5 inline-flex items-center gap-2 font-bold text-amber-500">
-                  See all live demos
-                  <span className="transition-transform group-hover:translate-x-1">
-                    -&gt;
-                  </span>
-                </span>
-              </div>
-              <Image
-                src="/bento-3.webp"
-                alt="AI and web projects preview"
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="absolute inset-0 h-full w-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-linear-to-r from-neutral-900 to-transparent z-0" />
-            </button>
-          </Reveal>
-        </div>
-
-        <Reveal>
-          <div
-            id="project-slider"
-            className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-neutral-900 text-white"
-          >
-            <div className="grid min-h-[520px] grid-cols-1 md:grid-cols-2">
-              <div className="relative min-h-[320px] overflow-hidden bg-neutral-950 md:min-h-full">
-                <Image
-                  src={currentProject.image}
-                  alt=""
-                  fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="object-cover opacity-25 blur-xl scale-110"
-                  aria-hidden="true"
-                />
-                <Image
-                  src={currentProject.image}
-                  alt={`${currentProject.title} preview`}
-                  fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="object-contain p-6 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-black/20" />
-                <div className="absolute left-6 top-6 rounded-full bg-black/50 px-4 py-2 text-xs font-bold uppercase tracking-widest text-amber-300 backdrop-blur">
-                  {activeProject + 1} / {projectLinks.length}
-                </div>
-              </div>
-
-              <div className="flex flex-col justify-between p-6 md:p-10">
-                <div>
-                  <span className="mb-6 inline-flex rounded-full bg-amber-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-amber-500">
-                    {currentProject.type}
-                  </span>
-                  <h3 className="mb-5 text-4xl font-black tracking-tight md:text-6xl">
-                    {currentProject.title}
-                  </h3>
-                  <p className="max-w-xl text-lg leading-relaxed text-neutral-300">
-                    {currentProject.description}
-                  </p>
-                  <div className="mt-7 flex flex-wrap gap-2">
-                    {currentProject.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-white/10 px-3 py-1 text-xs text-neutral-300"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-10 flex flex-wrap items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={previousProject}
-                    className="grid h-12 w-12 place-items-center rounded-full border border-white/15 text-white transition hover:border-amber-500 hover:text-amber-500"
-                    aria-label="Previous project"
-                  >
-                    &lt;
-                  </button>
-                  <button
-                    type="button"
-                    onClick={nextProject}
-                    className="grid h-12 w-12 place-items-center rounded-full border border-white/15 text-white transition hover:border-amber-500 hover:text-amber-500"
-                    aria-label="Next project"
-                  >
-                    &gt;
-                  </button>
-                  <a
-                    href={currentProject.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full bg-amber-600 px-7 py-4 font-bold text-black transition hover:bg-white"
-                  >
-                    Open Live Demo
-                  </a>
-                </div>
-              </div>
+              <h2 className="text-[clamp(2.5rem,10vw,6.5rem)] font-bold leading-none tracking-tight text-white">
+                SELECTED <span className="text-amber-500">PROJECTS</span>
+              </h2>
             </div>
+            <p className="max-w-sm text-sm leading-relaxed text-neutral-400 md:text-right">
+              Showing {visibleProjects.length} of {projects.length} polished
+              web, AI, and creative builds.
+            </p>
           </div>
         </Reveal>
 
-        <div
-          id="all-projects"
-          className="mt-8 grid grid-cols-1 items-stretch gap-4 md:grid-cols-3"
-        >
-          {projectLinks.map((project, index) => (
-            <Reveal key={project.title} delay={index * 0.05} className="h-full">
-              <button
-                type="button"
-                onClick={() => showProjectSlide(index)}
-                className="group relative flex h-full min-h-[430px] w-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-neutral-900 text-left text-white transition duration-500 hover:-translate-y-2 hover:border-amber-500/70 hover:bg-neutral-800"
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          {visibleProjects.map((project, index) => (
+            <Reveal key={project.title} delay={index * 0.04} className="h-full">
+              <a
+                href={project.href}
+                target={isExternalLink(project.href) ? "_blank" : undefined}
+                rel={
+                  isExternalLink(project.href)
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                className="group relative flex h-full min-h-[360px] flex-col overflow-hidden rounded-lg border border-white/10 bg-neutral-900 text-white transition duration-500 hover:-translate-y-1 hover:border-amber-500/70 hover:bg-neutral-800 sm:min-h-[400px]"
               >
-                <div className="relative h-52 shrink-0 overflow-hidden bg-neutral-950">
+                <div className="relative aspect-[16/10] shrink-0 overflow-hidden bg-neutral-950">
                   <Image
                     src={project.image}
                     alt=""
                     fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover opacity-25 blur-lg scale-110"
                     aria-hidden="true"
                   />
@@ -340,24 +185,29 @@ export default function BentoGrid() {
                     src={project.image}
                     alt={`${project.title} preview`}
                     fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="object-contain p-4 opacity-95 transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-neutral-900 to-transparent" />
                 </div>
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="mb-5 flex items-center justify-between gap-4">
-                    <span className="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-500">
+
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <div className="mb-5 flex items-center justify-between gap-3">
+                    <span className="text-xs font-bold uppercase tracking-widest text-amber-500">
                       {project.type}
                     </span>
-                    <span className="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
                       -&gt;
                     </span>
                   </div>
-                  <h3 className="mb-3 text-2xl font-bold">{project.title}</h3>
+
+                  <h3 className="mb-3 text-2xl font-bold leading-tight">
+                    {project.title}
+                  </h3>
                   <p className="mb-6 flex-1 text-sm leading-relaxed text-neutral-400">
                     {project.description}
                   </p>
+
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
                       <span
@@ -369,10 +219,27 @@ export default function BentoGrid() {
                     ))}
                   </div>
                 </div>
-              </button>
+              </a>
             </Reveal>
           ))}
         </div>
+
+        {hiddenProjectCount > 0 && (
+          <Reveal>
+            <div className="mt-10 flex justify-center md:mt-12">
+              <button
+                type="button"
+                aria-expanded={showAllProjects}
+                onClick={() => setShowAllProjects((current) => !current)}
+                className="rounded-full border border-white/15 bg-white/[0.03] px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:border-amber-500 hover:bg-amber-500 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
+              >
+                {showAllProjects
+                  ? "Show Less"
+                  : `Show More (${hiddenProjectCount})`}
+              </button>
+            </div>
+          </Reveal>
+        )}
       </div>
     </section>
   );
