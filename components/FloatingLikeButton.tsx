@@ -4,10 +4,14 @@ import { useEffect, useRef, useState } from "react";
 
 const LIKE_STORAGE_KEY = "web_portfolio_liked";
 const LIKE_COUNT_STORAGE_KEY = "web_portfolio_like_count";
+const LIKE_SESSION_STORAGE_KEY = "web_portfolio_like_session";
 const MAX_LIKES_PER_USER = 10;
 const API_ROUTE = "/api/like";
 
 type LikeApiResponse = {
+  ok?: boolean;
+  message?: string;
+  error?: string;
   likes?: number;
   totalLikes?: number;
   total?: number;
@@ -17,6 +21,23 @@ type LikeApiResponse = {
 function readLikeCount(data: LikeApiResponse): number {
   const value = data.totalLikes ?? data.likes ?? data.total ?? data.count ?? 0;
   return Number.isFinite(value) ? value : 0;
+}
+
+function getLikeSessionId() {
+  const storedSessionId = localStorage.getItem(LIKE_SESSION_STORAGE_KEY);
+
+  if (storedSessionId) {
+    return storedSessionId;
+  }
+
+  const nextSessionId =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  localStorage.setItem(LIKE_SESSION_STORAGE_KEY, nextSessionId);
+
+  return nextSessionId;
 }
 
 export default function FloatingLikeButton() {
@@ -93,15 +114,27 @@ export default function FloatingLikeButton() {
     }, 1000);
 
     try {
-      await fetch(API_ROUTE, {
+      const response = await fetch(API_ROUTE, {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          "Content-Type": "application/json",
         },
-        body: new URLSearchParams({
+        body: JSON.stringify({
           action: "like",
-        }).toString(),
+          page: document.title || "Portfolio",
+          pathname: window.location.pathname,
+          userAgent: navigator.userAgent,
+          referrer: document.referrer,
+          sessionId: getLikeSessionId(),
+          extra: "",
+        }),
       });
+      const raw = await response.text();
+      const data = raw ? (JSON.parse(raw) as LikeApiResponse) : ({} as LikeApiResponse);
+
+      if (!response.ok || data.ok === false) {
+        throw new Error(data.message || data.error || "Failed to save like");
+      }
 
       const nextCount = Math.min(MAX_LIKES_PER_USER, userLikeCount + 1);
       localStorage.setItem(LIKE_STORAGE_KEY, "true");
