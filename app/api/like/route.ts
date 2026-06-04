@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const APPS_SCRIPT_URL = process.env.NEXT_PUBLIC_APPS_SCRIPT_URL;
+const DEFAULT_APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzK_q-GoZWyQjIySzo89vjixub6e06INpCSLaOqZUTp9ISK4XXseXWNJMf5mla9bkQx2A/exec";
+const APPS_SCRIPT_URL =
+  process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ?? DEFAULT_APPS_SCRIPT_URL;
 
 async function forwardToAppsScript(request: NextRequest) {
   if (!APPS_SCRIPT_URL) {
