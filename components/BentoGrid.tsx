@@ -148,13 +148,6 @@ export default function BentoGrid() {
     };
   }, []);
 
-  function scrollProjectTrack(direction: "back" | "forward") {
-    window.scrollBy({
-      top: direction === "forward" ? 520 : -520,
-      behavior: "smooth",
-    });
-  }
-
   return (
     <section
       ref={sectionRef}
@@ -162,45 +155,21 @@ export default function BentoGrid() {
       style={{ height: scrollSectionHeight }}
       className="relative z-20 bg-neutral-950"
     >
-      <div className="sticky top-0 mx-auto flex min-h-screen max-w-7xl flex-col justify-center overflow-hidden px-4 py-20 sm:px-6 md:px-8">
+      <div className="sticky top-0 mx-auto flex h-svh min-h-0 max-w-7xl flex-col justify-start overflow-hidden px-4 py-10 sm:px-6 md:px-8 md:py-12 lg:py-10 xl:py-12 [@media_(max-height:820px)]:py-8">
         <Reveal>
-          <div className="mb-8 flex flex-col gap-5 md:mb-10 md:flex-row md:items-end md:justify-between">
+          <div className="mb-6 flex flex-col gap-5 md:mb-7 md:flex-row md:items-end md:justify-between [@media_(max-height:820px)]:mb-5">
             <div className="max-w-4xl">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-amber-500 sm:text-sm">
-                Scroll down to slide
-              </p>
-              <h2 className="text-[clamp(2.5rem,10vw,6.5rem)] font-bold leading-none tracking-tight text-white">
+              <h2 className="text-[clamp(2.5rem,8vw,5.75rem)] font-bold leading-none tracking-tight text-white [@media_(max-height:820px)]:text-[clamp(2.25rem,6vw,4.25rem)]">
                 SELECTED <span className="text-amber-500">PROJECTS</span>
               </h2>
             </div>
-            <div className="flex items-end justify-between gap-5 md:flex-col md:items-end">
-              <p className="max-w-sm text-sm leading-relaxed text-neutral-400 md:text-right">
-                {projects.length} selected web, AI, and creative builds arranged
-                in a sideways scroll sequence.
-              </p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  aria-label="Previous projects"
-                  onClick={() => scrollProjectTrack("back")}
-                  className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/[0.04] text-sm font-black text-white transition hover:border-amber-500 hover:bg-amber-500 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
-                >
-                  &lt;-
-                </button>
-                <button
-                  type="button"
-                  aria-label="Next projects"
-                  onClick={() => scrollProjectTrack("forward")}
-                  className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/[0.04] text-sm font-black text-white transition hover:border-amber-500 hover:bg-amber-500 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
-                >
-                  -&gt;
-                </button>
-              </div>
+            <div className="flex items-center justify-end">
+              <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-amber-500 sm:text-sm">Scroll down to slide</h2>
             </div>
           </div>
         </Reveal>
 
-        <div ref={viewportRef} className="relative overflow-hidden">
+        <div ref={viewportRef} className="relative min-h-0 flex-1 overflow-hidden">
           <div className="pointer-events-none absolute bottom-6 right-0 top-0 z-10 hidden w-24 bg-linear-to-l from-neutral-950 to-transparent lg:block" />
           <motion.div
             ref={trackRef}
@@ -211,7 +180,7 @@ export default function BentoGrid() {
               <Reveal
                 key={project.title}
                 delay={index * 0.035}
-                className="h-full w-[82vw] max-w-[460px] shrink-0 sm:w-[430px] lg:w-[460px]"
+                className="h-[min(900px,calc(100svh-300px))] min-h-[390px] w-[82vw] max-w-[460px] shrink-0 sm:h-[min(900px,calc(100svh-300px))] sm:min-h-[420px] sm:w-[430px] lg:h-[min(900px,calc(100svh-285px))] lg:min-h-[430px] lg:w-[460px] [@media_(max-height:820px)]:lg:h-[min(450px,calc(100svh-285px))]"
               >
                 <a
                   href={project.href}
@@ -221,9 +190,9 @@ export default function BentoGrid() {
                       ? "noopener noreferrer"
                       : undefined
                   }
-                  className="group relative flex h-full min-h-[380px] flex-col overflow-hidden rounded-lg border border-white/10 bg-neutral-900 text-white transition duration-500 hover:-translate-y-1 hover:border-amber-500/70 hover:bg-neutral-800 sm:min-h-[430px]"
+                  className="group relative flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-neutral-900 text-white transition duration-500 hover:-translate-y-1 hover:border-amber-500/70 hover:bg-neutral-800"
                 >
-                  <div className="relative aspect-[16/10] shrink-0 overflow-hidden bg-neutral-950">
+                  <div className="relative aspect-[16/10] shrink-0 overflow-hidden bg-neutral-950 [@media_(max-height:820px)]:lg:aspect-[16/7]">
                     <Image
                       src={project.image}
                       alt=""
@@ -242,20 +211,20 @@ export default function BentoGrid() {
                     <div className="absolute inset-0 bg-linear-to-t from-neutral-900 to-transparent" />
                   </div>
 
-                  <div className="flex flex-1 flex-col p-5 sm:p-6">
-                    <div className="mb-5 flex items-center justify-between gap-3">
+                  <div className="flex min-h-0 flex-1 flex-col p-5 sm:p-6 [@media_(max-height:820px)]:lg:p-4">
+                    <div className="mb-5 flex items-center justify-between gap-3 [@media_(max-height:820px)]:lg:mb-3">
                       <span className="text-xs font-bold uppercase tracking-widest text-amber-500">
                         {project.type}
                       </span>
                       <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
-                        -&gt;
+                        &gt;
                       </span>
                     </div>
 
-                    <h3 className="mb-3 text-2xl font-bold leading-tight">
+                    <h3 className="mb-3 text-2xl font-bold leading-tight [@media_(max-height:820px)]:lg:mb-2 [@media_(max-height:820px)]:lg:text-xl">
                       {project.title}
                     </h3>
-                    <p className="mb-6 flex-1 text-sm leading-relaxed text-neutral-400">
+                    <p className="mb-6 text-sm leading-relaxed text-neutral-400 [@media_(max-height:820px)]:lg:mb-4 [@media_(max-height:820px)]:lg:line-clamp-2">
                       {project.description}
                     </p>
 
