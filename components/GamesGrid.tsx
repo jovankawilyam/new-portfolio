@@ -13,6 +13,33 @@ const games = [
     description:
       "Interactive neon-themed hand hockey game with fast-paced gameplay and vibrant visuals.",
   },
+  {
+    title: "Pic Game Puzzle",
+    href: "https://pic-puzzle-cam.vercel.app/",
+    image: "/images/puzzle-cam.png",
+    type: "Game",
+    tags: ["Game", "Puzzle", "Web"],
+    description:
+      "Play with puzzle and camera, fun to play with friends.",
+  },
+  {
+    title: "Car Racer Cam",
+    href: "https://racecar-game-seven.vercel.app/",
+    image: "/images/comingsoon.png",
+    type: "Game",
+    tags: ["Game", "Race", "Web"],
+    description:
+      "COMING SOON!",
+  },
+  {
+    title: "Cyber Connect",
+    href: "https://cyberconnect.vercel.app/",
+    image: "/images/comingsoon.png",
+    type: "Game",
+    tags: ["Game", "Web", "Puzzle"],
+    description:
+      "COMING SOON!",
+  },
 ];
 
 function isExternalLink(href: string) {
