@@ -23,20 +23,20 @@ const games = [
       "Play with puzzle and camera, fun to play with friends.",
   },
   {
+    title: "Cyber Connect",
+    href: "https://cyber-connect-cam.vercel.app/",
+    image: "/images/cyber.png",
+    type: "Game",
+    tags: ["Game", "Web", "Puzzle"],
+    description:
+      "Cyber Connect is a puzzle game where players must connect nodes to create secure pathways across a futuristic network grid.",
+  },
+  {
     title: "Car Racer Cam",
     href: "https://racecar-game-seven.vercel.app/",
     image: "/images/comingsoon.png",
     type: "Game",
     tags: ["Game", "Race", "Web"],
-    description:
-      "COMING SOON!",
-  },
-  {
-    title: "Cyber Connect",
-    href: "https://cyberconnect.vercel.app/",
-    image: "/images/comingsoon.png",
-    type: "Game",
-    tags: ["Game", "Web", "Puzzle"],
     description:
       "COMING SOON!",
   },
@@ -106,7 +106,7 @@ export default function GamesGrid() {
                       {game.type}
                     </span>
                     <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
-                      -&gt;
+                        →
                     </span>
                   </div>
 

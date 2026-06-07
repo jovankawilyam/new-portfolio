@@ -112,7 +112,9 @@ export default function Achievements() {
 
           gsap.set(card, {
             x,
+            xPercent: -50,
             y,
+            yPercent: -50,
             scale,
             opacity,
             zIndex: Math.round(focus * 100) + achievements.length - index,

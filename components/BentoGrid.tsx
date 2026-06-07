@@ -155,16 +155,16 @@ export default function BentoGrid() {
       style={{ height: scrollSectionHeight }}
       className="relative z-20 bg-neutral-950"
     >
-      <div className="sticky top-0 mx-auto flex h-svh min-h-0 max-w-7xl flex-col justify-start overflow-hidden px-4 py-10 sm:px-6 md:px-8 md:py-12 lg:py-10 xl:py-12 [@media_(max-height:820px)]:py-8">
+      <div className="sticky top-0 mx-auto flex h-svh min-h-0 max-w-7xl flex-col justify-start overflow-hidden px-4 py-7 sm:px-6 sm:py-10 md:px-8 md:py-12 lg:py-10 xl:py-12 [@media_(max-height:820px)]:py-8">
         <Reveal>
-          <div className="mb-6 flex flex-col gap-5 md:mb-7 md:flex-row md:items-end md:justify-between [@media_(max-height:820px)]:mb-5">
+          <div className="mb-4 flex flex-col gap-3 md:mb-7 md:flex-row md:items-end md:justify-between md:gap-5 [@media_(max-height:820px)]:mb-5">
             <div className="max-w-4xl">
-              <h2 className="text-[clamp(2.5rem,8vw,5.75rem)] font-bold leading-none tracking-tight text-white [@media_(max-height:820px)]:text-[clamp(2.25rem,6vw,4.25rem)]">
+              <h2 className="text-[clamp(2rem,8vw,5.75rem)] font-bold leading-none tracking-tight text-white sm:text-[clamp(2.5rem,8vw,5.75rem)] [@media_(max-height:820px)]:text-[clamp(2.25rem,6vw,4.25rem)]">
                 SELECTED <span className="text-amber-500">PROJECTS</span>
               </h2>
             </div>
             <div className="flex items-center justify-end">
-              <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-amber-500 sm:text-sm">Scroll down to slide</h2>
+              <h2 className="text-[10px] font-bold uppercase tracking-[0.24em] text-amber-500 sm:text-sm sm:tracking-[0.3em]">Scroll down to slide</h2>
             </div>
           </div>
         </Reveal>
@@ -180,7 +180,7 @@ export default function BentoGrid() {
               <Reveal
                 key={project.title}
                 delay={index * 0.035}
-                className="h-[min(900px,calc(100svh-300px))] min-h-[390px] w-[82vw] max-w-[460px] shrink-0 sm:h-[min(900px,calc(100svh-300px))] sm:min-h-[420px] sm:w-[430px] lg:h-[min(900px,calc(100svh-285px))] lg:min-h-[430px] lg:w-[460px] [@media_(max-height:820px)]:lg:h-[min(450px,calc(100svh-285px))]"
+                className="h-[min(520px,calc(100svh-205px))] min-h-[420px] w-[86vw] max-w-[420px] shrink-0 sm:h-[min(900px,calc(100svh-300px))] sm:min-h-[420px] sm:w-[430px] sm:max-w-[460px] lg:h-[min(900px,calc(100svh-285px))] lg:min-h-[430px] lg:w-[460px] [@media_(max-height:700px)]:h-[calc(100svh-185px)] [@media_(max-height:700px)]:min-h-[380px] [@media_(max-height:820px)]:lg:h-[min(450px,calc(100svh-285px))]"
               >
                 <a
                   href={project.href}
@@ -192,7 +192,7 @@ export default function BentoGrid() {
                   }
                   className="group relative flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-white/10 bg-neutral-900 text-white transition duration-500 hover:-translate-y-1 hover:border-amber-500/70 hover:bg-neutral-800"
                 >
-                  <div className="relative aspect-[16/10] shrink-0 overflow-hidden bg-neutral-950 [@media_(max-height:820px)]:lg:aspect-[16/7]">
+                  <div className="relative aspect-[16/8] shrink-0 overflow-hidden bg-neutral-950 sm:aspect-[16/10] [@media_(max-height:700px)]:aspect-[16/7] [@media_(max-height:820px)]:lg:aspect-[16/7]">
                     <Image
                       src={project.image}
                       alt=""
@@ -211,8 +211,8 @@ export default function BentoGrid() {
                     <div className="absolute inset-0 bg-linear-to-t from-neutral-900 to-transparent" />
                   </div>
 
-                  <div className="flex min-h-0 flex-1 flex-col p-5 sm:p-6 [@media_(max-height:820px)]:lg:p-4">
-                    <div className="mb-5 flex items-center justify-between gap-3 [@media_(max-height:820px)]:lg:mb-3">
+                  <div className="flex min-h-0 flex-1 flex-col p-4 sm:p-6 [@media_(max-height:820px)]:lg:p-4">
+                    <div className="mb-3 flex items-center justify-between gap-3 sm:mb-5 [@media_(max-height:820px)]:lg:mb-3">
                       <span className="text-xs font-bold uppercase tracking-widest text-amber-500">
                         {project.type}
                       </span>
@@ -221,10 +221,10 @@ export default function BentoGrid() {
                       </span>
                     </div>
 
-                    <h3 className="mb-3 text-2xl font-bold leading-tight [@media_(max-height:820px)]:lg:mb-2 [@media_(max-height:820px)]:lg:text-xl">
+                    <h3 className="mb-2 text-xl font-bold leading-tight sm:mb-3 sm:text-2xl [@media_(max-height:820px)]:lg:mb-2 [@media_(max-height:820px)]:lg:text-xl">
                       {project.title}
                     </h3>
-                    <p className="mb-6 text-sm leading-relaxed text-neutral-400 [@media_(max-height:820px)]:lg:mb-4 [@media_(max-height:820px)]:lg:line-clamp-2">
+                    <p className="mb-4 text-sm leading-relaxed text-neutral-400 sm:mb-6 [@media_(max-height:700px)]:line-clamp-3 [@media_(max-height:820px)]:lg:mb-4 [@media_(max-height:820px)]:lg:line-clamp-2">
                       {project.description}
                     </p>
 
