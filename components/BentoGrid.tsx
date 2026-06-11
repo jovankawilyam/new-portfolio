@@ -104,6 +104,7 @@ const projects = [
     tags: ["Website", "Tracking", "Documents"],
     description:
       "A website for tracking and sending documents and packages, with a simple and modern interface.",
+    isComingSoon: true,
   },
 ];
 
@@ -117,22 +118,18 @@ export default function BentoGrid() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [maxHorizontalTravel, setMaxHorizontalTravel] = useState(0);
   const [scrollSectionHeight, setScrollSectionHeight] = useState("520vh");
-  const [maintenanceProject, setMaintenanceProject] = useState<string | null>(null);
+  const [statusProject, setStatusProject] = useState<any | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, -maxHorizontalTravel],
-  );
+  const x = useTransform(scrollYProgress, [0, 1], [0, -maxHorizontalTravel]);
 
   const handleLinkClick = (e: React.MouseEvent, project: any) => {
-    if (project.isMaintenance) {
+    if (project.isMaintenance || project.isComingSoon) {
       e.preventDefault();
-      setMaintenanceProject(project.title);
+      setStatusProject(project);
     }
   };
 
@@ -228,14 +225,6 @@ export default function BentoGrid() {
                       className="object-contain p-4 opacity-95 transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-neutral-900 to-transparent" />
-                    
-                    {(project as any).isMaintenance && (
-                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
-                        <div className="rounded-full bg-amber-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-black">
-                          Under Maintenance
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   <div className="flex min-h-0 flex-1 flex-col p-4 sm:p-6 [@media_(max-height:820px)]:lg:p-4">
@@ -244,7 +233,7 @@ export default function BentoGrid() {
                         {project.type}
                       </span>
                       <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
-                        {(project as any).isMaintenance ? "!" : ">"}
+                        {((project as any).isMaintenance || (project as any).isComingSoon) ? "!" : ">"}
                       </span>
                     </div>
 
@@ -274,13 +263,13 @@ export default function BentoGrid() {
       </div>
 
       <AnimatePresence>
-        {maintenanceProject && (
+        {statusProject && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setMaintenanceProject(null)}
+              onClick={() => setStatusProject(null)}
               className="absolute inset-0 bg-neutral-950/80 backdrop-blur-sm"
             />
             <motion.div
@@ -290,27 +279,63 @@ export default function BentoGrid() {
               className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-neutral-900 p-8 text-center shadow-2xl"
             >
               <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="h-8 w-8"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.83-5.83m-5.83 5.83L3.75 21.75M9 13.5l3.75-3.75m0 0L15 6.75M12.75 9.75l3.75-3.75m0 0L18.75 3m-9.75 6.75c1.242 0 2.25-1.008 2.25-2.25S10.242 4.5 9 4.5 6.75 5.508 6.75 6.75 7.758 9 9 9z"
-                  />
-                </svg>
+                {statusProject.isMaintenance ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="h-8 w-8"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.83-5.83m-5.83 5.83L3.75 21.75M9 13.5l3.75-3.75m0 0L15 6.75M12.75 9.75l3.75-3.75m0 0L18.75 3m-9.75 6.75c1.242 0 2.25-1.008 2.25-2.25S10.242 4.5 9 4.5 6.75 5.508 6.75 6.75 7.758 9 9 9z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="h-8 w-8"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                )}
               </div>
-              <h3 className="mb-2 text-2xl font-bold text-white">Maintenance</h3>
+              <h3 className="mb-2 text-2xl font-bold text-white">
+                {statusProject.isMaintenance ? "Maintenance" : "Coming Soon"}
+              </h3>
               <p className="mb-8 text-neutral-400">
-                Sorry, <span className="text-amber-500 font-bold">{maintenanceProject}</span> is currently under maintenance for improvements. Please check back later!
+                {statusProject.isMaintenance ? (
+                  <>
+                    Sorry,{" "}
+                    <span className="text-amber-500 font-bold">
+                      {statusProject.title}
+                    </span>{" "}
+                    is currently under maintenance for improvements. Please
+                    check back later!
+                  </>
+                ) : (
+                  <>
+                    Exciting things are on the way!{" "}
+                    <span className="text-amber-500 font-bold">
+                      {statusProject.title}
+                    </span>{" "}
+                    is currently under development. Stay tuned!
+                  </>
+                )}
               </p>
               <button
-                onClick={() => setMaintenanceProject(null)}
+                onClick={() => setStatusProject(null)}
                 className="w-full rounded-xl bg-white py-4 text-sm font-bold uppercase tracking-widest text-black transition hover:bg-amber-500"
               >
                 Close
