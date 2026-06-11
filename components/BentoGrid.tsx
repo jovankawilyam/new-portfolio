@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import { useLayoutEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
 
@@ -96,6 +96,15 @@ const projects = [
     description:
       "Simple attendance registration form with a clean and modern interface.",
   },
+  {
+    title: "Doclang Boba",
+    href: "https://doclangboba.web.id/",
+    image: "/images/comingsoon.png",
+    type: "Website",
+    tags: ["Website", "Tracking", "Documents"],
+    description:
+      "A website for tracking and sending documents and packages, with a simple and modern interface.",
+  },
 ];
 
 function isExternalLink(href: string) {
@@ -108,6 +117,8 @@ export default function BentoGrid() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [maxHorizontalTravel, setMaxHorizontalTravel] = useState(0);
   const [scrollSectionHeight, setScrollSectionHeight] = useState("520vh");
+  const [maintenanceProject, setMaintenanceProject] = useState<string | null>(null);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
@@ -117,6 +128,13 @@ export default function BentoGrid() {
     [0, 1],
     [0, -maxHorizontalTravel],
   );
+
+  const handleLinkClick = (e: React.MouseEvent, project: any) => {
+    if (project.isMaintenance) {
+      e.preventDefault();
+      setMaintenanceProject(project.title);
+    }
+  };
 
   useLayoutEffect(() => {
     function measureProjectTrack() {
@@ -184,6 +202,7 @@ export default function BentoGrid() {
               >
                 <a
                   href={project.href}
+                  onClick={(e) => handleLinkClick(e, project)}
                   target={isExternalLink(project.href) ? "_blank" : undefined}
                   rel={
                     isExternalLink(project.href)
@@ -209,6 +228,14 @@ export default function BentoGrid() {
                       className="object-contain p-4 opacity-95 transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-neutral-900 to-transparent" />
+                    
+                    {(project as any).isMaintenance && (
+                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                        <div className="rounded-full bg-amber-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-black">
+                          Under Maintenance
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex min-h-0 flex-1 flex-col p-4 sm:p-6 [@media_(max-height:820px)]:lg:p-4">
@@ -217,7 +244,7 @@ export default function BentoGrid() {
                         {project.type}
                       </span>
                       <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
-                        &gt;
+                        {(project as any).isMaintenance ? "!" : ">"}
                       </span>
                     </div>
 
@@ -245,6 +272,53 @@ export default function BentoGrid() {
           </motion.div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {maintenanceProject && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMaintenanceProject(null)}
+              className="absolute inset-0 bg-neutral-950/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-neutral-900 p-8 text-center shadow-2xl"
+            >
+              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-500">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="h-8 w-8"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.83-5.83m-5.83 5.83L3.75 21.75M9 13.5l3.75-3.75m0 0L15 6.75M12.75 9.75l3.75-3.75m0 0L18.75 3m-9.75 6.75c1.242 0 2.25-1.008 2.25-2.25S10.242 4.5 9 4.5 6.75 5.508 6.75 6.75 7.758 9 9 9z"
+                  />
+                </svg>
+              </div>
+              <h3 className="mb-2 text-2xl font-bold text-white">Maintenance</h3>
+              <p className="mb-8 text-neutral-400">
+                Sorry, <span className="text-amber-500 font-bold">{maintenanceProject}</span> is currently under maintenance for improvements. Please check back later!
+              </p>
+              <button
+                onClick={() => setMaintenanceProject(null)}
+                className="w-full rounded-xl bg-white py-4 text-sm font-bold uppercase tracking-widest text-black transition hover:bg-amber-500"
+              >
+                Close
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -24,6 +24,13 @@ const experiences = [
     description:
       "Built responsive marketplace interfaces using HTML, CSS, JavaScript, and Laravel with CRUD, authentication, search, and filtering flows.",
   },
+  {
+    role: "Intership FullStack Web Developer",
+    place: "KPKNL Bogor",
+    period: "23 February - Now",
+    description:
+      "Transforming Post-Auction Administration into a Seamless, Digitized Experience.",
+  },
 ];
 
 export default function Testimonial() {

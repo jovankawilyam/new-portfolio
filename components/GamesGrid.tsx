@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import Reveal from "@/components/Reveal";
 
 const games = [
   {
     title: "Neon Hand Hockey",
     href: "https://gameneonhandhockey-byjovanka.vercel.app/",
-    image: "/images/neonhockey.png",
+    image: "/images/game-neon.png",
     type: "Arcade Game",
     tags: ["Game", "Neon", "Web"],
     description:
@@ -33,12 +35,13 @@ const games = [
   },
   {
     title: "Car Racer Cam",
-    href: "https://racecar-game-seven.vercel.app/",
-    image: "/images/comingsoon.png",
+    href: "https://car-racer-cam.vercel.app/",
+    image: "/images/image.png",
     type: "Game",
-    tags: ["Game", "Race", "Web"],
+    tags: ["Game", "Race", "Web", "AI"],
     description:
-      "COMING SOON!",
+      "Race with your car using your hands!",
+    isMaintenance: true,
   },
 ];
 
@@ -47,6 +50,15 @@ function isExternalLink(href: string) {
 }
 
 export default function GamesGrid() {
+  const [maintenanceGame, setMaintenanceGame] = useState<string | null>(null);
+
+  const handleLinkClick = (e: React.MouseEvent, game: typeof games[0]) => {
+    if (game.isMaintenance) {
+      e.preventDefault();
+      setMaintenanceGame(game.title);
+    }
+  };
+
   return (
     <section
       id="games"
@@ -75,6 +87,7 @@ export default function GamesGrid() {
             <Reveal key={game.title} delay={index * 0.04} className="h-full">
               <a
                 href={game.href}
+                onClick={(e) => handleLinkClick(e, game)}
                 target={isExternalLink(game.href) ? "_blank" : undefined}
                 rel={
                   isExternalLink(game.href) ? "noopener noreferrer" : undefined
@@ -98,6 +111,14 @@ export default function GamesGrid() {
                     className="object-contain p-4 opacity-95 transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-neutral-900 to-transparent" />
+                  
+                  {game.isMaintenance && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                      <div className="rounded-full bg-amber-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-black">
+                        Under Maintenance
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -106,7 +127,7 @@ export default function GamesGrid() {
                       {game.type}
                     </span>
                     <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
-                        →
+                        {game.isMaintenance ? "!" : "→"}
                     </span>
                   </div>
 
@@ -133,6 +154,54 @@ export default function GamesGrid() {
           ))}
         </div>
       </div>
+
+      <AnimatePresence>
+        {maintenanceGame && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMaintenanceGame(null)}
+              className="absolute inset-0 bg-neutral-950/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-neutral-900 p-8 text-center shadow-2xl"
+            >
+              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-500">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="h-8 w-8"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.83-5.83m-5.83 5.83L3.75 21.75M9 13.5l3.75-3.75m0 0L15 6.75M12.75 9.75l3.75-3.75m0 0L18.75 3m-9.75 6.75c1.242 0 2.25-1.008 2.25-2.25S10.242 4.5 9 4.5 6.75 5.508 6.75 6.75 7.758 9 9 9z"
+                  />
+                </svg>
+              </div>
+              <h3 className="mb-2 text-2xl font-bold text-white">Maintenance</h3>
+              <p className="mb-8 text-neutral-400">
+                Sorry, <span className="text-amber-500 font-bold">{maintenanceGame}</span> is currently under maintenance for improvements. Please check back later!
+              </p>
+              <button
+                onClick={() => setMaintenanceGame(null)}
+                className="w-full rounded-xl bg-white py-4 text-sm font-bold uppercase tracking-widest text-black transition hover:bg-amber-500"
+              >
+                Close
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
+
