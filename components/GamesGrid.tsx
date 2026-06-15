@@ -11,7 +11,7 @@ const games = [
     href: "https://gameneonhandhockey-byjovanka.vercel.app/",
     image: "/images/game-neon.png",
     type: "Arcade Game",
-    tags: ["Game", "Neon", "Web"],
+    tags: ["Game", "Neon", "Web", "2P"],
     description:
       "Interactive neon-themed hand hockey game with fast-paced gameplay and vibrant visuals.",
   },
@@ -20,7 +20,7 @@ const games = [
     href: "https://pic-puzzle-cam.vercel.app/",
     image: "/images/puzzle-cam.png",
     type: "Game",
-    tags: ["Game", "Puzzle", "Web"],
+    tags: ["Game", "Puzzle", "Web", "1P"],
     description:
       "Play with puzzle and camera, fun to play with friends.",
   },
@@ -29,7 +29,7 @@ const games = [
     href: "https://cyber-connect-cam.vercel.app/",
     image: "/images/cyber.png",
     type: "Game",
-    tags: ["Game", "Web", "Puzzle"],
+    tags: ["Game", "Web", "Puzzle", "2P"],
     description:
       "Cyber Connect is a puzzle game where players must connect nodes to create secure pathways across a futuristic network grid.",
   },
@@ -38,9 +38,9 @@ const games = [
     href: "https://car-racer-cam.vercel.app/",
     image: "/images/image.png",
     type: "Game",
-    tags: ["Game", "Race", "Web", "AI"],
+    tags: ["Game", "Race", "Web", "AI", "2P"],
     description:
-      "Race with your car using your hands!",
+      "Race with your car using your hands or noise!",
     isMaintenance: true,
   },
 ];

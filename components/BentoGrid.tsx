@@ -5,7 +5,18 @@ import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import { useLayoutEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
 
-const projects = [
+type Project = {
+  title: string;
+  href: string;
+  image: string;
+  type: string;
+  tags: string[];
+  description: string;
+  isMaintenance?: boolean;
+  isComingSoon?: boolean;
+};
+
+const projects: Project[] = [
   {
     title: "Jual Beli Akun PUBGM Marketplace",
     href: "#contact",
@@ -118,7 +129,7 @@ export default function BentoGrid() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [maxHorizontalTravel, setMaxHorizontalTravel] = useState(0);
   const [scrollSectionHeight, setScrollSectionHeight] = useState("520vh");
-  const [statusProject, setStatusProject] = useState<any | null>(null);
+  const [statusProject, setStatusProject] = useState<Project | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -126,7 +137,7 @@ export default function BentoGrid() {
   });
   const x = useTransform(scrollYProgress, [0, 1], [0, -maxHorizontalTravel]);
 
-  const handleLinkClick = (e: React.MouseEvent, project: any) => {
+  const handleLinkClick = (e: React.MouseEvent, project: Project) => {
     if (project.isMaintenance || project.isComingSoon) {
       e.preventDefault();
       setStatusProject(project);
@@ -233,7 +244,7 @@ export default function BentoGrid() {
                         {project.type}
                       </span>
                       <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
-                        {((project as any).isMaintenance || (project as any).isComingSoon) ? "!" : ">"}
+                        {project.isMaintenance || project.isComingSoon ? "!" : ">"}
                       </span>
                     </div>
 
