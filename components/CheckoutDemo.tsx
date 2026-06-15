@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 type Plan = {
   id: string;
@@ -134,7 +135,12 @@ export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }
         }
       `}</style>
 
-      <div style={styles.paymentFrame}>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        style={styles.paymentFrame}
+      >
         <div style={styles.header}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#10b981' }} />
@@ -152,14 +158,17 @@ export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }
 
             <div style={styles.plansList}>
               {plans.map((plan) => (
-                <button
+                <motion.button
                   key={plan.id}
                   onClick={() => setSelectedPlan(plan)}
+                  whileHover={{ scale: 1.02, x: 4 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
                   style={{
                     ...styles.planCard,
                     borderColor: selectedPlan.id === plan.id ? plan.color : '#e2e8f0',
                     background: selectedPlan.id === plan.id ? plan.accent : '#fff',
-                    boxShadow: selectedPlan.id === plan.id ? `0 0 0 1px ${plan.color}` : 'none',
+                    boxShadow: selectedPlan.id === plan.id ? `0 0 0 1px ${plan.color}, 0 4px 12px -2px rgba(0,0,0,0.05)` : 'none',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -181,7 +190,7 @@ export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }
                       </span>
                     ))}
                   </div>
-                </button>
+                </motion.button>
               ))}
             </div>
           </div>
@@ -194,16 +203,29 @@ export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }
                 <span style={{ textDecoration: isVoucherApplied ? 'line-through' : 'none' }}>{selectedPlan.price}</span>
               </div>
               
-              {isVoucherApplied && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 14, color: '#10b981' }}>
-                  <span>Voucher (JOJOGG)</span>
-                  <span>-{selectedPlan.price}</span>
-                </div>
-              )}
+              <AnimatePresence>
+                {isVoucherApplied && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 14, color: '#10b981', overflow: 'hidden' }}
+                  >
+                    <span>Voucher (JOJOGG)</span>
+                    <span>-{selectedPlan.price}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 700, borderTop: '1px solid #f1f5f9', paddingTop: 12, marginTop: 12 }}>
                 <span>Total</span>
-                <span>{currentPrice}</span>
+                <motion.span
+                  key={currentPrice}
+                  initial={{ scale: 1.1, color: '#10b981' }}
+                  animate={{ scale: 1, color: '#0f172a' }}
+                >
+                  {currentPrice}
+                </motion.span>
               </div>
             </div>
 
@@ -224,8 +246,10 @@ export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }
                     outline: 'none'
                   }}
                 />
-                <button 
+                <motion.button 
                   onClick={handleApplyVoucher}
+                  whileHover={{ backgroundColor: '#e2e8f0' }}
+                  whileTap={{ scale: 0.95 }}
                   style={{ 
                     padding: '8px 16px', 
                     borderRadius: 8, 
@@ -237,18 +261,28 @@ export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }
                   }}
                 >
                   Apply
-                </button>
+                </motion.button>
               </div>
-              {isVoucherApplied && <p style={{ fontSize: 11, color: '#10b981', marginTop: 4, fontWeight: 600 }}>✓ Code applied successfully!</p>}
+              {isVoucherApplied && (
+                <motion.p 
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{ fontSize: 11, color: '#10b981', marginTop: 4, fontWeight: 600 }}
+                >
+                  ✓ Code applied successfully!
+                </motion.p>
+              )}
             </div>
 
             <div style={{ marginTop: 10 }}>
               <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>Payment Method</h3>
               <div style={{ display: 'grid', gap: 8 }}>
                 {paymentMethods.map((m) => (
-                  <button
+                  <motion.button
                     key={m.id}
                     onClick={() => setMethod(m.id)}
+                    whileHover={{ scale: 1.01, backgroundColor: method === m.id ? '#f0f7ff' : '#f8fafc' }}
+                    whileTap={{ scale: 0.99 }}
                     style={{
                       ...styles.methodRow,
                       borderColor: method === m.id ? '#2563eb' : '#e2e8f0',
@@ -261,31 +295,51 @@ export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }
                       <p style={{ fontSize: 11, color: '#64748b', margin: 0 }}>{m.detail}</p>
                     </div>
                     <div style={{ ...styles.radio, borderColor: method === m.id ? '#2563eb' : '#cbd5e1' }}>
-                      {method === m.id && <div style={{ width: 8, height: 8, background: '#2563eb', borderRadius: '50%' }} />}
+                      {method === m.id && (
+                        <motion.div 
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          style={{ width: 8, height: 8, background: '#2563eb', borderRadius: '50%' }} 
+                        />
+                      )}
                     </div>
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             </div>
 
-            <button
+            <motion.button
               onClick={handlePay}
               disabled={loading || done}
+              whileHover={!(loading || done) ? { scale: 1.02 } : {}}
+              whileTap={!(loading || done) ? { scale: 0.98 } : {}}
               style={{
                 ...styles.payButton,
                 background: done ? "#10b981" : "#111827",
                 cursor: (loading || done) ? "not-allowed" : "pointer",
               }}
             >
-              {loading ? <span style={styles.spinner} /> : done ? "Success" : isVoucherApplied ? "Get Access for Free" : "Confirm Payment"}
-            </button>
+              {loading ? (
+                <motion.span 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+                  style={styles.spinner} 
+                />
+              ) : done ? "Success" : isVoucherApplied ? "Get Access for Free" : "Confirm Payment"}
+            </motion.button>
 
-            {done && (
-              <div style={styles.successBox}>
-                <p style={{ fontWeight: 700, margin: '0 0 4px' }}>Payment Approved</p>
-                <p style={{ margin: 0 }}>Your access to {selectedPlan.name} is now active.</p>
-              </div>
-            )}
+            <AnimatePresence>
+              {done && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  style={styles.successBox}
+                >
+                  <p style={{ fontWeight: 700, margin: '0 0 4px' }}>Payment Approved</p>
+                  <p style={{ margin: 0 }}>Your access to {selectedPlan.name} is now active.</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 12, color: '#94a3b8' }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -296,7 +350,7 @@ export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -353,6 +407,7 @@ const styles: Record<string, React.CSSProperties> = {
     textAlign: "left",
     cursor: "pointer",
     transition: "all 0.15s ease-out",
+    width: "100%",
   },
   checkoutPanel: {
     padding: 24,
@@ -370,6 +425,7 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: "pointer",
     background: "#fff",
     transition: "all 0.1s ease",
+    width: "100%",
   },
   radio: {
     width: 18,
@@ -399,7 +455,6 @@ const styles: Record<string, React.CSSProperties> = {
     border: "2px solid rgba(255,255,255,0.3)",
     borderTopColor: "#fff",
     borderRadius: "50%",
-    animation: "checkout-spin 0.8s linear infinite",
   },
   successBox: {
     padding: 16,

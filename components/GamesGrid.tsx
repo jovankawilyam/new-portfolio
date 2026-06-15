@@ -157,8 +157,9 @@ export default function GamesGrid() {
 
       <AnimatePresence>
         {maintenanceGame && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
             <motion.div
+              key="maintenance-backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -166,6 +167,7 @@ export default function GamesGrid() {
               className="absolute inset-0 bg-neutral-950/80 backdrop-blur-sm"
             />
             <motion.div
+              key="maintenance-content"
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
