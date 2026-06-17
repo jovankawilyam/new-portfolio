@@ -248,7 +248,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                   <button
                     type="button"
                     onClick={applyPromoCode}
-                    className="bg-slate-900 hover:bg-slate-800 text-xs font-bold px-4 py-2 rounded-lg transition active:scale-95">Pakai
+                    className="bg-slate-400 hover:bg-slate-900 text-xs font-bold px-2 py-2 rounded-lg transition active:scale-95 text-white">Gunakan
                   </button>
                 </div>
                   {promoError && <span className="text-[10px] font-semibold text-red-500 pl-1 block">{promoError}</span>}
