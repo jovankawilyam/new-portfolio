@@ -1,54 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useEffect, useId, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 
-type Plan = {
-  id: string;
-  name: string;
-  price: string;
-  priceRaw: number;
-  description: string;
-  features: string[];
-  color: string;
-  accent: string;
-};
-
-const plans: Plan[] = [
-  {
-    id: "plus",
-    name: "Plus",
-    price: "Rp 49.000",
-    priceRaw: 49000,
-    description: "Ideal for personal use and standard projects.",
-    features: ["Standard performance", "Core portfolio access", "Email support"],
-    color: "#2563eb",
-    accent: "rgba(37,99,235,0.05)",
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    price: "Rp 99.000",
-    priceRaw: 99000,
-    description: "Advanced features for professionals.",
-    features: ["High-speed performance", "All source code access", "Priority support"],
-    color: "#7c3aed",
-    accent: "rgba(124,58,237,0.05)",
-  },
-  {
-    id: "ultra",
-    name: "Ultra",
-    price: "Rp 199.000",
-    priceRaw: 199000,
-    description: "Our most capable model for complex needs.",
-    features: ["Expert-level insights", "1-on-1 consultation", "Lifetime updates"],
-    color: "#111827",
-    accent: "rgba(17,24,39,0.05)",
-  },
-];
+type PaymentMethodId = "qris" | "debit";
 
 type PaymentMethod = {
-  id: string;
+  id: PaymentMethodId;
   name: string;
   detail: string;
   icon: React.ReactNode;
@@ -56,412 +14,380 @@ type PaymentMethod = {
 
 const paymentMethods: PaymentMethod[] = [
   {
-    id: "visa",
-    name: "Credit / Debit Card",
-    detail: "",
-    icon: (
-      <svg width="32" height="20" viewBox="0 0 32 20" fill="none">
-        <rect width="32" height="20" rx="3" fill="#1e293b"/>
-        <path d="M12.6 14.2L13.8 6.5H16.2L15 14.2H12.6ZM22.4 6.7C21.8 6.5 21.1 6.4 20.4 6.4C18.3 6.4 16.8 7.5 16.8 9.2C16.8 10.4 17.8 11 18.6 11.4C19.4 11.8 19.7 12 19.7 12.4C19.7 12.9 19 13.2 18.4 13.2C17.6 13.2 17.1 13 16.7 12.8L16.3 14.4C16.8 14.6 17.5 14.8 18.3 14.8C20.5 14.8 22 13.7 22 11.9C22 10.8 21.3 10.2 20.1 9.6C19.3 9.2 18.9 9 18.9 8.6C18.9 8.2 19.4 7.8 20.3 7.8C21 7.8 21.5 7.9 21.9 8.1L22.4 6.7ZM27.1 6.5H25.3C24.8 6.5 24.3 6.8 24.1 7.3L21.3 14.2H23.8L24.3 12.8H27.3L27.6 14.2H30L27.8 6.5H27.1ZM24.8 11.2L25.8 8.4L26.4 11.2H24.8ZM11.1 6.5H8.7L6.5 11.8L5.7 7.2C5.6 6.8 5.3 6.5 4.9 6.5H1.3L1.2 7.1C2 7.3 3 7.6 3.7 8C4.1 8.2 4.2 8.4 4.3 8.8L6.2 14.2H8.7L12.5 6.5H11.1Z" fill="white"/>
-      </svg>
-    )
-  },
-  {
     id: "qris",
-    name: "QRIS",
+    name: "QRIS / Snap Instan",
     detail: "",
     icon: (
-      <svg width="32" height="20" viewBox="0 0 32 20" fill="none">
-        <rect width="32" height="20" rx="3" fill="white" stroke="#e2e8f0"/>
-        <path d="M7 6H11V10H7V6ZM8 7V9H10V7H8Z" fill="#0f172a"/>
-        <path d="M13 6H17V10H13V6ZM14 7V9H16V7H14Z" fill="#0f172a"/>
-        <path d="M7 12H11V16H7V12ZM8 13V15H10V13H8Z" fill="#0f172a"/>
-        <path d="M13 12H15V14H13V12ZM15 14H17V16H15V14ZM13 14V16H15V14Z" fill="#0f172a"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+        <path d="M3 14h4v4H3zM7 14h3v1M14 18h3v3M20 14h1v4" strokeLinecap="round" />
       </svg>
-    )
+    ),
   },
   {
-    id: "transfer",
-    name: "Bank Transfer",
+    id: "debit",
+    name: "Debit Instan / GPN",
     detail: "",
     icon: (
-      <svg width="32" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2">
-        <path d="M3 21h18M3 10h18M5 10V7a2 2 0 012-2h10a2 2 0 012 2v3M7 21v-11M11 21v-11M15 21v-11M19 21v-11"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4">
+        <rect x="2" y="5" width="20" height="14" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
       </svg>
-    )
+    ),
   },
 ];
 
-export default function CheckoutDemo({ onComplete }: { onComplete?: () => void }) {
-  const [selectedPlan, setSelectedPlan] = useState<Plan>(plans[1]);
-  const [method, setMethod] = useState(paymentMethods[0].id);
-  const [loading, setLoading] = useState(false);
-  const [done, setDone] = useState(false);
-  const [voucher, setVoucher] = useState("");
-  const [isVoucherApplied, setIsVoucherApplied] = useState(false);
+function formatRupiah(value: number) {
+  if (value === 1) return "Rp 1";
+  return `Rp ${value.toLocaleString("id-ID")}`;
+}
 
-  const handleApplyVoucher = () => {
-    if (voucher.toUpperCase() === "JOJOGG") {
-      setIsVoucherApplied(true);
+function PremiumQrCode({ pattern, isGlitching }: { pattern: boolean[]; isGlitching: boolean }) {
+  const size = Math.sqrt(pattern.length);
+  return (
+    <motion.div 
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      className="w-44 h-44 bg-white p-3 border border-slate-200/80 rounded-2xl shadow-inner relative flex items-center justify-center mx-auto"
+    >
+      <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full shape-rendering-crispedges">
+        {pattern.map((filled, i) => {
+          const x = i % size;
+          const y = Math.floor(i / size);
+          return filled ? (
+            <rect key={i} x={x} y={y} width="1" height="1" fill={isGlitching ? "#10b981" : "#0f172a"} className="transition-colors duration-500" />
+          ) : null;
+        })}
+      </svg>
+      {/* Scanner Radar Line Animation */}
+      <motion.div 
+        animate={{ translateY: ["0px", "150px", "0px"] }}
+        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        className="absolute left-0 right-0 h-0.5 bg-emerald-500/50 shadow-[0_0_8px_#10b981] opacity-70 pointer-events-none"
+      />
+      <div className="absolute w-8 h-8 bg-white border border-slate-100 rounded-lg shadow flex items-center justify-center font-black text-[8px] text-slate-900 tracking-tighter">
+        QRIS
+      </div>
+    </motion.div>
+  );
+}
+
+// Tetap mempertahankan properti bawaan asli dari awal (onComplete, gameTitle, dll)
+export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access Plan" }: { onComplete?: () => void; gameTitle?: string }) {
+  const checkoutId = useId();
+  const [method, setMethod] = useState<PaymentMethodId>("qris");
+  const [status, setStatus] = useState<"details" | "processing" | "show_qris" | "success">("details");
+  const [countdown, setCountdown] = useState(900);
+
+  // States Tambahan Baru untuk mendukung kode promo JOJOGG tanpa merusak state utama
+  const [promoInput, setPromoInput] = useState("");
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [promoError, setPromoError] = useState("");
+
+  const basePrice = 125000;
+  // Alur kalkulasi diskon agar totalAmount menjadi Rp 1 saat promo JOJOGG aktif
+  const discount = promoApplied ? basePrice - 1 : 0;
+  const totalAmount = basePrice - discount;
+
+  const transactionId = useMemo(() => `PAY-${checkoutId.replace(/:/g, "").toUpperCase().slice(0, 8)}`, [checkoutId]);
+
+  const qrPattern = useMemo(() => {
+    return Array.from({ length: 225 }, (_, i) => {
+      const size = 15;
+      const x = i % size;
+      const y = Math.floor(i / size);
+      if ((x < 4 && y < 4) || (x > 10 && y < 4) || (x < 4 && y > 10)) {
+        return (x === 0 || x === 3 || y === 0 || y === 3) || (x === 11 || x === 14 || y === 0 || y === 3) || (x === 0 || x === 3 || y === 11 || y === 14);
+      }
+      return (i * 7 + transactionId.charCodeAt(i % 4)) % 3 === 0;
+    });
+  }, [transactionId]);
+
+  useEffect(() => {
+    if (status === "success") return;
+    const timer = setInterval(() => setCountdown((prev) => (prev > 0 ? prev - 1 : 900)), 1000);
+    return () => clearInterval(timer);
+  }, [status]);
+
+  const applyPromoCode = () => {
+    if (promoInput.trim().toUpperCase() === "JOJOGG") {
+      setPromoApplied(true);
+      setPromoError("");
     } else {
-      setIsVoucherApplied(false);
+      setPromoError("Kode promo tidak valid");
+      setPromoApplied(false);
     }
   };
 
-  const currentPrice = isVoucherApplied ? "Rp 0" : selectedPlan.price;
-
-  const handlePay = () => {
-    if (loading) return;
-    setLoading(true);
+  const handlePaymentSubmit = () => {
+    setStatus("processing");
     setTimeout(() => {
-      setLoading(false);
-      setDone(true);
-      setTimeout(() => onComplete?.(), 2500);
-    }, 2800);
+      if (method === "qris") {
+        setStatus("show_qris");
+        // Simulasi webhook callback otomatis: setelah 4 detik, beralih ke success
+        setTimeout(() => {
+          setStatus("processing");
+          setTimeout(() => {
+            setStatus("success");
+            if (onComplete) onComplete(); // Tetap memicu callback bawaan asli kamu
+          }, 1200);
+        }, 4000);
+      } else {
+        setStatus("success");
+        if (onComplete) onComplete(); // Tetap memicu callback bawaan asli kamu
+      }
+    }, 1800);
   };
 
   return (
-    <section style={styles.shell} data-checkout-shell>
-      <style>{`
-        @keyframes checkout-spin { to { transform: rotate(360deg); } }
-        .ultra-gradient {
-          background: linear-gradient(90deg, #3b82f6, #8b5cf6, #111827);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        @media (max-width: 960px) {
-          [data-checkout-body] { grid-template-columns: 1fr !important; }
-          [data-plans-panel] { border-right: 0 !important; border-bottom: 1px solid #e2e8f0 !important; }
-        }
-      `}</style>
-
+    <section className="min-h-screen w-full bg-[#f8fafc] px-4 py-8 text-slate-900 antialiased font-sans flex items-center justify-center">
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        style={styles.paymentFrame}
+        layout
+        className="w-full max-w-[360px] scale-135 bg-white border border-slate-200 rounded-3xl shadow-[0_20px_50px_rgba(15,23,42,0.06)] overflow-hidden flex flex-col justify-between"
       >
-        <div style={styles.header}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#10b981' }} />
-            <span style={{ fontWeight: 600, fontSize: 16 }}>Secure Checkout</span>
+        {/* HEADER BAR */}
+        <header className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <img src="/images/logo.png" alt="logo" className="h-7 w-auto object-contain" />
+            <div className="flex flex-col justify-center">
+              <span className="text-[15px] font-bold text-slate-800 uppercase tracking-widest block leading-none">
+                PEMBAYARAN
+              </span>
+            </div>
           </div>
-          <span style={styles.secureLabel}>Encryption Active</span>
+        </header>
+
+        {/* CONTAINER UTAMA INTERAKSI FLOW */}
+        <div className="p-4 flex-1 flex flex-col">
+          <AnimatePresence mode="wait">
+            
+            {/* SCREEN 1: DETAIL RINGKAS, PILIHAN METODE, & PROMO */}
+            {status === "details" && (
+              <motion.div 
+                key="details" 
+                initial={{ opacity: 0, y: 10 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0, y: -10 }} 
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="space-y-3 flex-1 flex flex-col"
+              >
+                {/* INVOICE TICKET */}
+                <div className="bg-slate-50/60 border border-slate-100 rounded-2xl p-3 relative overflow-hidden">
+                  <div className="flex justify-between items-start">
+                    <div className="min-w-0 pr-4">
+                      <h4 className="text-[13px] font-bold text-slate-800 truncate">{gameTitle}</h4>
+                    </div>
+                    
+                    {/* Animasi Harga Coret Khusus saat Kupon Aktif */}
+                    <div className="text-right flex flex-col items-end shrink-0">
+                      <AnimatePresence>
+                        {promoApplied && (
+                          <motion.span 
+                            initial={{ opacity: 0, y: 2 }}
+                            animate={{ opacity: 0.4, y: 0 }}
+                            className="text-[9px] line-through font-medium text-slate-500"
+                          >
+                            {formatRupiah(basePrice)}
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                      <motion.span 
+                        key={totalAmount}
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className={`text-xs font-black tracking-tight ${promoApplied ? "text-emerald-600 text-[13px] font-black" : "text-slate-800"}`}
+                      >
+                        {formatRupiah(totalAmount)}
+                      </motion.span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PILIHAN METODE PEMBAYARAN */}
+                <div className="space-y-2">
+                  {paymentMethods.map((item) => {
+                    const isSelected = item.id === method;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setMethod(item.id)}
+                        className={`w-full flex items-center gap-3 rounded-xl border p-3 text-left transition-all ${
+                          isSelected 
+                            ? "border-slate-900 bg-slate-50/50 ring-[0.5px] ring-slate-900 shadow-sm" 
+                            : "border-slate-200/70 bg-white hover:bg-slate-50/40"
+                        }`}
+                      >
+                        <div className={`p-1.5 rounded-lg border transition-colors ${isSelected ? "bg-slate-900 text-white border-slate-900" : "bg-slate-100 text-slate-400 border-slate-200"}`}>
+                          {item.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[11px] font-bold text-slate-900">{item.name}</p>
+                          <p className="text-[9px] text-slate-400 truncate mt-0.5">{item.detail}</p>
+                        </div>
+                        <div className="flex items-center justify-center">
+                          <div className={`h-3.5 w-3.5 rounded-full border flex items-center justify-center transition-all ${isSelected ? "border-slate-900" : "border-slate-300"}`}>
+                            {isSelected && <motion.div layoutId="activeIndicator" className="h-1.5 w-1.5 rounded-full bg-slate-900" />}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* KODE PROMO (JOJOGG) */}
+                <div className="space-y-1">
+                  <div className="flex gap-2 bg-slate-50 p-1 rounded-xl border border-slate-200/60 focus-within:border-slate-400 transition-colors">
+                    <input
+                      value={promoInput}
+                      onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
+                      placeholder="Masukkan Kode Promo"
+                      className="flex-1 bg-transparent px-2.5 py-1 text-[11px] font-medium outline-none placeholder:text-slate-400 tracking-wider"/>
+                  <button
+                    type="button"
+                    onClick={applyPromoCode}
+                    className="bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg transition active:scale-95">Pakai
+                  </button>
+                </div>
+                  {promoError && <span className="text-[8px] font-semibold text-red-500 pl-1 block">{promoError}</span>}
+                  {promoApplied && (
+                    <motion.span 
+                      initial={{ opacity: 0, x: -2 }} 
+                      animate={{ opacity: 1, x: 0 }} 
+                      className="text-[8px] font-bold text-emerald-600 pl-1 block"
+                    >
+                      ✓ CIHUYYY Kupon Aktif! Harga dipotong menjadi Rp 1.
+                    </motion.span>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {/* SCREEN 2: LOADING PROCESSING */}
+            {status === "processing" && (
+              <motion.div 
+                key="processing" 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center text-center py-8 flex-1"
+              >
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                  className="h-5 w-5 rounded-full border-2 border-slate-200 border-t-slate-900 mb-2.5" 
+                />
+                <p className="text-[11px] font-bold text-slate-800">Menyinkronkan jalur enkripsi bank...</p>
+                <p className="text-[9px] text-slate-400 mt-1">Mohon tunggu sebentar</p>
+              </motion.div>
+            )}
+
+            {/* SCREEN 3: QRIS SCREEN GENERATED */}
+            {status === "show_qris" && (
+              <motion.div 
+                key="show_qris" 
+                initial={{ opacity: 0, scale: 0.95 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center text-center py-1 flex-1 space-y-3"
+              >
+                <PremiumQrCode pattern={qrPattern} isGlitching={promoApplied} />
+                <div className="space-y-1">
+                  <h3 className="text-[11px] font-bold text-slate-900">Scan Kode QRIS</h3>
+                  <p className="text-[9px] text-slate-400 max-w-[200px] mx-auto leading-normal">
+                    {promoApplied ? "Sistem mendeteksi nominal khusus Rp 1. Selesaikan pembayaran sekarang..." : "Menunggu konfirmasi mutasi pembayaran e-wallet masuk secara otomatis..."}
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {/* SCREEN 4: SUCCESS SCREEN */}
+            {status === "success" && (
+              <motion.div 
+                key="success" 
+                initial={{ opacity: 0, scale: 0.9 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                className="flex flex-col items-center justify-center text-center py-8 flex-1"
+              >
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: [0, 1.2, 1] }}
+                  transition={{ duration: 0.4 }}
+                  className="h-8 w-8 rounded-full bg-emerald-500 text-white flex items-center justify-center mb-2.5 shadow-[0_4px_12px_rgba(16,185,129,0.3)]"
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </motion.div>
+                <h3 className="text-[11px] font-bold text-slate-900">Transaksi Berhasil</h3>
+                <p className="text-[9px] text-slate-400 mt-0.5">Dana settlement aman terverifikasi penuh.</p>
+              </motion.div>
+            )}
+
+          </AnimatePresence>
         </div>
 
-        <div style={styles.body} data-checkout-body>
-          <div style={styles.plansPanel} data-plans-panel>
-            <div style={{ marginBottom: 24 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 600, margin: '0 0 6px' }}>Select Plan</h2>
-              <p style={{ color: '#64748b', fontSize: 14 }}>Choose the access level that fits your needs.</p>
-            </div>
-
-            <div style={styles.plansList}>
-              {plans.map((plan) => (
-                <motion.button
-                  key={plan.id}
-                  onClick={() => setSelectedPlan(plan)}
-                  whileHover={{ scale: 1.02, x: 4 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                  style={{
-                    ...styles.planCard,
-                    borderColor: selectedPlan.id === plan.id ? plan.color : '#e2e8f0',
-                    background: selectedPlan.id === plan.id ? plan.accent : '#fff',
-                    boxShadow: selectedPlan.id === plan.id ? `0 0 0 1px ${plan.color}, 0 4px 12px -2px rgba(0,0,0,0.05)` : 'none',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                    <span style={{ fontSize: 16, fontWeight: 700, color: plan.id === 'ultra' ? 'inherit' : plan.color }} className={plan.id === 'ultra' ? 'ultra-gradient' : ''}>
-                      {plan.name}
-                    </span>
-                    <span style={{ fontSize: 14, fontWeight: 700, textDecoration: isVoucherApplied ? 'line-through' : 'none', opacity: isVoucherApplied ? 0.5 : 1 }}>
-                      {plan.price}
-                    </span>
-                  </div>
-                  {isVoucherApplied && (
-                    <p style={{ fontSize: 14, fontWeight: 700, color: '#10b981', margin: '-4px 0 6px', textAlign: 'right' }}>Rp 0</p>
-                  )}
-                  <p style={{ fontSize: 12, color: '#64748b', margin: '0 0 10px' }}>{plan.description}</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                    {plan.features.slice(0, 2).map((f, i) => (
-                      <span key={i} style={{ fontSize: 11, background: '#f1f5f9', padding: '2px 8px', borderRadius: 4, color: '#475569' }}>
-                        {f}
-                      </span>
-                    ))}
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          </div>
-
-          <div style={styles.checkoutPanel}>
-            <div style={{ marginBottom: 12 }}>
-              <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 16 }}>Order Summary</h3>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 14 }}>
-                <span style={{ color: '#64748b' }}>{selectedPlan.name} Access</span>
-                <span style={{ textDecoration: isVoucherApplied ? 'line-through' : 'none' }}>{selectedPlan.price}</span>
+{/* BOTTOM ACTION BAR */}
+        {status === "details" && (
+          <footer className="bg-slate-50 border-t border-slate-100 p-5 space-y-4">
+            
+            {/* RINCIAN HARGA DETAIL */}
+            <div className="space-y-1.5 text-[11px] text-slate-500 border-b border-slate-200/60 pb-3">
+              <div className="flex justify-between">
+                <span>Harga Game : {gameTitle}</span>
+                <span className="font-medium text-slate-700">{formatRupiah(basePrice)}</span>
               </div>
               
-              <AnimatePresence>
-                {isVoucherApplied && (
-                  <motion.div 
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 14, color: '#10b981', overflow: 'hidden' }}
-                  >
-                    <span>Voucher (JOJOGG)</span>
-                    <span>-{selectedPlan.price}</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {promoApplied && (
+                <div className="flex justify-between text-emerald-600 font-medium">
+                  <span>Diskon Kupon (JOJOGG)</span>
+                  <span>-{formatRupiah(basePrice - 1)}</span>
+                </div>
+              )}
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 16, fontWeight: 700, borderTop: '1px solid #f1f5f9', paddingTop: 12, marginTop: 12 }}>
-                <span>Total</span>
-                <motion.span
-                  key={currentPrice}
-                  initial={{ scale: 1.1, color: '#10b981' }}
-                  animate={{ scale: 1, color: '#0f172a' }}
+              <div className="flex justify-between border-t border-dashed border-slate-200 pt-1.5 text-slate-600">
+                <span>Sub Total :</span>
+                <span className="font-semibold">{formatRupiah(totalAmount)}</span>
+              </div>
+            </div>
+
+            {/* ACTION BAR (TOTAL AKHIR & TOMBOL BAYAR) */}
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-[8px] uppercase font-bold tracking-widest text-slate-400">Total Akhir</span>
+                <motion.span 
+                  key={totalAmount}
+                  layout
+                  className={`text-sm font-black tracking-tight ${
+                    promoApplied ? "text-emerald-600 text-base" : "text-slate-950"
+                  }`}
                 >
-                  {currentPrice}
+                  {/* Total Akhir = totalAmount + Pajak */}
+                  {promoApplied 
+                    ? formatRupiah(1) 
+                    : formatRupiah(totalAmount + Math.round(totalAmount * 0.11))
+                  }
                 </motion.span>
               </div>
+              
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={handlePaymentSubmit}
+                className={`text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-colors ${
+                  promoApplied 
+                    ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-[0_4px_12px_rgba(16,185,129,0.2)]" 
+                    : "bg-slate-950 text-white hover:bg-slate-900"
+                }`}
+              >
+                Bayar Sekarang
+              </motion.button>
             </div>
 
-            <div style={{ marginTop: 4 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Promo Code</p>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <input 
-                  type="text" 
-                  placeholder="Enter code" 
-                  value={voucher}
-                  onChange={(e) => setVoucher(e.target.value)}
-                  style={{ 
-                    flex: 1, 
-                    padding: '8px 12px', 
-                    borderRadius: 8, 
-                    border: '1px solid #e2e8f0',
-                    fontSize: 13,
-                    outline: 'none'
-                  }}
-                />
-                <motion.button 
-                  onClick={handleApplyVoucher}
-                  whileHover={{ backgroundColor: '#e2e8f0' }}
-                  whileTap={{ scale: 0.95 }}
-                  style={{ 
-                    padding: '8px 16px', 
-                    borderRadius: 8, 
-                    border: 'none', 
-                    background: '#f1f5f9', 
-                    fontSize: 13, 
-                    fontWeight: 600,
-                    cursor: 'pointer'
-                  }}
-                >
-                  Apply
-                </motion.button>
-              </div>
-              {isVoucherApplied && (
-                <motion.p 
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  style={{ fontSize: 11, color: '#10b981', marginTop: 4, fontWeight: 600 }}
-                >
-                  ✓ Code applied successfully!
-                </motion.p>
-              )}
-            </div>
-
-            <div style={{ marginTop: 10 }}>
-              <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>Payment Method</h3>
-              <div style={{ display: 'grid', gap: 8 }}>
-                {paymentMethods.map((m) => (
-                  <motion.button
-                    key={m.id}
-                    onClick={() => setMethod(m.id)}
-                    whileHover={{ scale: 1.01, backgroundColor: method === m.id ? '#f0f7ff' : '#f8fafc' }}
-                    whileTap={{ scale: 0.99 }}
-                    style={{
-                      ...styles.methodRow,
-                      borderColor: method === m.id ? '#2563eb' : '#e2e8f0',
-                      background: method === m.id ? '#f0f7ff' : '#fff',
-                    }}
-                  >
-                    {m.icon}
-                    <div style={{ flex: 1, textAlign: 'left' }}>
-                      <p style={{ fontSize: 13, fontWeight: 600, margin: 0 }}>{m.name}</p>
-                      <p style={{ fontSize: 11, color: '#64748b', margin: 0 }}>{m.detail}</p>
-                    </div>
-                    <div style={{ ...styles.radio, borderColor: method === m.id ? '#2563eb' : '#cbd5e1' }}>
-                      {method === m.id && (
-                        <motion.div 
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          style={{ width: 8, height: 8, background: '#2563eb', borderRadius: '50%' }} 
-                        />
-                      )}
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-
-            <motion.button
-              onClick={handlePay}
-              disabled={loading || done}
-              whileHover={!(loading || done) ? { scale: 1.02 } : {}}
-              whileTap={!(loading || done) ? { scale: 0.98 } : {}}
-              style={{
-                ...styles.payButton,
-                background: done ? "#10b981" : "#111827",
-                cursor: (loading || done) ? "not-allowed" : "pointer",
-              }}
-            >
-              {loading ? (
-                <motion.span 
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-                  style={styles.spinner} 
-                />
-              ) : done ? "Success" : isVoucherApplied ? "Get Access for Free" : "Confirm Payment"}
-            </motion.button>
-
-            <AnimatePresence>
-              {done && (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  style={styles.successBox}
-                >
-                  <p style={{ fontWeight: 700, margin: '0 0 4px' }}>Payment Approved</p>
-                  <p style={{ margin: 0 }}>Your access to {selectedPlan.name} is now active.</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 12, color: '#94a3b8' }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0110 0v4"/>
-              </svg>
-              <span style={{ fontSize: 11 }}>End-to-end encrypted</span>
-            </div>
-          </div>
-        </div>
+          </footer>
+        )}
       </motion.div>
     </section>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  shell: {
-    minHeight: "100svh",
-    display: "grid",
-    placeItems: "center",
-    padding: 20,
-    background: "#f1f5f9",
-    color: "#0f172a",
-    fontFamily: "Inter, system-ui, sans-serif",
-  },
-  paymentFrame: {
-    width: "min(900px, 100%)",
-    background: "#fff",
-    borderRadius: 16,
-    overflow: "hidden",
-    boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)",
-    border: "1px solid #e2e8f0",
-  },
-  header: {
-    padding: "16px 24px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid #f1f5f9",
-  },
-  secureLabel: {
-    fontSize: 11,
-    color: "#059669",
-    fontWeight: 700,
-    textTransform: "uppercase",
-    letterSpacing: "0.05em",
-  },
-  body: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-  },
-  plansPanel: {
-    padding: 24,
-    background: "#fff",
-    borderRight: "1px solid #f1f5f9",
-  },
-  plansList: {
-    display: "grid",
-    gap: 12,
-  },
-  planCard: {
-    padding: 16,
-    border: "1px solid #e2e8f0",
-    borderRadius: 12,
-    textAlign: "left",
-    cursor: "pointer",
-    transition: "all 0.15s ease-out",
-    width: "100%",
-  },
-  checkoutPanel: {
-    padding: 24,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-  },
-  methodRow: {
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-    padding: "12px 14px",
-    border: "1px solid #e2e8f0",
-    borderRadius: 10,
-    cursor: "pointer",
-    background: "#fff",
-    transition: "all 0.1s ease",
-    width: "100%",
-  },
-  radio: {
-    width: 18,
-    height: 18,
-    border: "2px solid #cbd5e1",
-    borderRadius: "50%",
-    display: "grid",
-    placeItems: "center",
-  },
-  payButton: {
-    width: "100%",
-    padding: "14px",
-    borderRadius: 10,
-    border: "none",
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: 600,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 8,
-    transition: "opacity 0.2s",
-  },
-  spinner: {
-    width: 20,
-    height: 20,
-    border: "2px solid rgba(255,255,255,0.3)",
-    borderTopColor: "#fff",
-    borderRadius: "50%",
-  },
-  successBox: {
-    padding: 16,
-    background: "#ecfdf5",
-    color: "#065f46",
-    borderRadius: 10,
-    fontSize: 13,
-    border: "1px solid #d1fae5",
-  },
-};

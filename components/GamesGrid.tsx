@@ -5,7 +5,17 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Reveal from "@/components/Reveal";
 
-const games = [
+type Game = {
+  title: string;
+  href: string;
+  image: string;
+  type: string;
+  tags: string[];
+  description: string;
+  isMaintenance?: boolean;
+};
+
+const games: Game[] = [
   {
     title: "Neon Hand Hockey",
     href: "https://gameneonhandhockey-byjovanka.vercel.app/",
@@ -52,11 +62,17 @@ function isExternalLink(href: string) {
 export default function GamesGrid() {
   const [maintenanceGame, setMaintenanceGame] = useState<string | null>(null);
 
-  const handleLinkClick = (e: React.MouseEvent, game: typeof games[0]) => {
+  const handleLinkClick = (e: React.MouseEvent, game: Game) => {
+    e.preventDefault();
+
     if (game.isMaintenance) {
-      e.preventDefault();
       setMaintenanceGame(game.title);
+      return;
     }
+
+    // Redirect to a dedicated checkout page in a new tab
+    const checkoutUrl = `/checkout?title=${encodeURIComponent(game.title)}&url=${encodeURIComponent(game.href)}`;
+    window.open(checkoutUrl, "_blank");
   };
 
   return (
@@ -206,4 +222,3 @@ export default function GamesGrid() {
     </section>
   );
 }
-
