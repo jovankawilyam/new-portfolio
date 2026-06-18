@@ -378,7 +378,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                 className={`text-sm font-bold px-6 py-3 rounded-xl shadow-sm transition-colors ${
                   promoApplied 
                     ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-[0_4px_12px_rgba(16,185,129,0.2)]" 
-                    : "bg-slate-950 text-white hover:bg-slate-900"
+                    : "bg-slate-800 hover:bg-slate-900 text-xs font-bold px-2 py-2 rounded-lg transition active:scale-95 text-white"
                 }`}
               >
                 Bayar Sekarang

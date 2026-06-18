@@ -54,15 +54,6 @@ const projects: Project[] = [
       "Computer vision project for detecting sleepiness or drowsiness through camera input.",
   },
   {
-    title: "Photobooth Bounty",
-    href: "https://photobooth-bounty.vercel.app/",
-    image: "/images/bounty.png",
-    type: "Creative Tool",
-    tags: ["Camera", "UI", "Photo"],
-    description:
-      "Automatic browser-based photobooth experience with themed output and simple capture flow.",
-  },
-  {
     title: "Seminar Registration",
     href: "https://pendaftaransysfornation.vercel.app/",
     image: "/images/pendaftaran.png",
@@ -70,15 +61,6 @@ const projects: Project[] = [
     tags: ["Form", "Event", "Web"],
     description:
       "Online registration flow for seminar participants, built for fast identity collection.",
-  },
-  {
-    title: "Photobooth Vintage",
-    href: "https://photobooth-vintage.vercel.app/",
-    image: "/images/vintage.png",
-    type: "Creative Tool",
-    tags: ["Camera", "Vintage", "UI"],
-    description:
-      "Retro-styled photobooth with classic framing and nostalgic visual treatment.",
   },
   {
     title: "Voting Pemira 2025",

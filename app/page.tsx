@@ -7,6 +7,7 @@ import AboutReveal from "@/components/AboutReveal";
 import Achievements from "@/components/Achievements";
 import GamesGrid from "@/components/GamesGrid";
 import Navbar from "@/components/Navbar";
+import PhotoboothGrid from "@/components/PhotoboothGrid";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
         {/* <ShowcaseCarousel />  Disabling carousel for now to focus on vertical flow or if needed enable it */}
         <Testimonial />
         <GamesGrid />
+        <PhotoboothGrid />
         <Achievements />
         <Stats />
         <Footer />

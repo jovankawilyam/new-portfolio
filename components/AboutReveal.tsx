@@ -164,6 +164,12 @@ export default function AboutReveal() {
               >
                 View Games
               </a>
+              <a
+                href="#photobooth"
+                className="rounded-full border border-white/15 px-7 py-4 text-sm font-black uppercase tracking-widest text-white transition hover:border-amber-500 hover:text-amber-500"
+              >
+                View Photobooth
+              </a>
             </div>
           </Reveal>
         </div>
