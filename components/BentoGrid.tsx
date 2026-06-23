@@ -91,13 +91,13 @@ const projects: Project[] = [
   },
   {
     title: "Doclang Boba",
-    href: "https://doclangboba.web.id/",
-    image: "/images/comingsoon.png",
+    href: "https://doclang-boba-app-production.up.railway.app/",
+    image: "/images/doclangboba.png",
     type: "Website",
     tags: ["Website", "Tracking", "Documents"],
     description:
       "A website for tracking and sending documents and packages, with a simple and modern interface.",
-    isComingSoon: true,
+    /**isComingSoon: true, */
   },
 ];
 
