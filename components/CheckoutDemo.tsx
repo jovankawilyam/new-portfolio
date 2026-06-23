@@ -87,9 +87,12 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
   const [promoError, setPromoError] = useState("");
 
   const basePrice = 125000;
+  const adminFee = 2500;
   // Alur kalkulasi diskon agar totalAmount menjadi Rp 1 saat promo JOJOGG aktif
   const discount = promoApplied ? basePrice - 1 : 0;
   const totalAmount = basePrice - discount;
+  const effectiveAdminFee = promoApplied ? 0 : adminFee;
+  const finalAmount = totalAmount + effectiveAdminFee;
 
   const transactionId = useMemo(() => `PAY-${checkoutId.replace(/:/g, "").toUpperCase().slice(0, 8)}`, [checkoutId]);
 
@@ -351,6 +354,11 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                 <span>Sub Total :</span>
                 <span className="font-semibold">{formatRupiah(totalAmount)}</span>
               </div>
+
+              <div className="flex justify-between text-slate-600">
+                <span>Biaya Admin :</span>
+                <span className="font-semibold">{formatRupiah(effectiveAdminFee)}</span>
+              </div>
             </div>
 
             {/* ACTION BAR (TOTAL AKHIR & TOMBOL BAYAR) */}
@@ -358,17 +366,13 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
               <div className="flex flex-col">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Total Akhir</span>
                 <motion.span 
-                  key={totalAmount}
+                  key={finalAmount}
                   layout
                   className={`text-lg font-black tracking-tight ${
                     promoApplied ? "text-emerald-600 text-xl" : "text-slate-950"
                   }`}
                 >
-                  {/* Total Akhir = totalAmount + Pajak */}
-                  {promoApplied 
-                    ? formatRupiah(1) 
-                    : formatRupiah(totalAmount + Math.round(totalAmount * 0.11))
-                  }
+                  {formatRupiah(finalAmount)}
                 </motion.span>
               </div>
               
