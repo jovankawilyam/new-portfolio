@@ -24,7 +24,7 @@ const photobooth: Game[] = [
     tags: ["Camera", "Vintage", "UI"],
     description:
       "Retro-styled photobooth with classic framing and nostalgic visual treatment.",
-    isMaintenance: true,
+  
   },
   {
     title: "Photobooth Bounty",

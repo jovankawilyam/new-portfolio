@@ -45,6 +45,11 @@ export default function FloatingLikeButton() {
   const [userLikeCount, setUserLikeCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [showFlyingNumber, setShowFlyingNumber] = useState(false);
+
+  // States untuk fitur Buy me a Coffee
+  const [isCoffeeOpen, setIsCoffeeOpen] = useState(false);
+  const [coffeeStep, setCoffeeStep] = useState<"ask" | "qris">("ask");
+
   const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -152,45 +157,129 @@ export default function FloatingLikeButton() {
   const isDisabled = isAtLimit || isLoading;
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 sm:bottom-7 sm:right-7">
-      {showFlyingNumber ? (
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 text-base font-bold text-rose-400 drop-shadow-[0_8px_18px_rgba(244,63,94,0.35)] secret-like-float"
+    <>
+      <div className="fixed bottom-5 right-5 z-50 sm:bottom-7 sm:right-7 flex flex-col gap-3 items-center">
+        {/* Buy Me a Coffee Button */}
+        <button
+          type="button"
+          aria-label="Buy me a coffee"
+          title="Buy me a coffee"
+          onClick={() => {
+            setIsCoffeeOpen(true);
+            setCoffeeStep("ask");
+          }}
+          className="group grid h-[52px] w-[52px] place-items-center rounded-full border border-white/15 bg-white/10 text-white text-2xl shadow-2xl backdrop-blur-md transition-all duration-300 sm:h-14 sm:w-14 hover:-translate-y-1 hover:border-amber-300/70 hover:bg-amber-500/20 hover:text-amber-100 active:scale-95"
         >
-          +1
-        </span>
-      ) : null}
+          <span
+            aria-hidden="true"
+            className="leading-none transition-transform duration-300 group-hover:scale-110"
+          >
+            ☕
+          </span>
+        </button>
 
-      <button
-        type="button"
-        aria-label={
-          isAtLimit
-            ? `Kuota apresiasi habis. Total likes ${totalLikes}`
-            : `Kirim apresiasi rahasia. Sisa ${MAX_LIKES_PER_USER - userLikeCount} kali`
-        }
-        title={isAtLimit ? "Kuota apresiasi habis" : "Kirim apresiasi"}
-        disabled={isDisabled}
-        onClick={handleLike}
-        className={[
-          "group grid h-[52px] w-[52px] place-items-center rounded-full border text-2xl shadow-2xl backdrop-blur-md transition-all duration-300 sm:h-14 sm:w-14",
-          isAtLimit
-            ? "border-rose-400 bg-rose-500 text-white shadow-rose-500/30"
-            : "border-white/15 bg-white/10 text-white shadow-black/35 hover:-translate-y-1 hover:border-rose-300/70 hover:bg-rose-500/20 hover:text-rose-100",
-          isLoading && !isAtLimit ? "cursor-wait opacity-70" : "",
-          isDisabled ? "disabled:cursor-not-allowed" : "active:scale-95",
-        ].join(" ")}
-      >
-        <span
-          aria-hidden="true"
-          className={[
-            "leading-none transition-transform duration-300",
-            isAtLimit ? "scale-110" : "group-hover:scale-110",
-          ].join(" ")}
+        {/* Like Button Wrapper */}
+        <div className="relative">
+          {showFlyingNumber ? (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 text-base font-bold text-rose-400 drop-shadow-[0_8px_18px_rgba(244,63,94,0.35)] secret-like-float"
+            >
+              +1
+            </span>
+          ) : null}
+
+          <button
+            type="button"
+            aria-label={
+              isAtLimit
+                ? `Kuota apresiasi habis. Total likes ${totalLikes}`
+                : `Kirim apresiasi rahasia. Sisa ${MAX_LIKES_PER_USER - userLikeCount} kali`
+            }
+            title={isAtLimit ? "Kuota apresiasi habis" : "Kirim apresiasi"}
+            disabled={isDisabled}
+            onClick={handleLike}
+            className={[
+              "group grid h-[52px] w-[52px] place-items-center rounded-full border text-2xl shadow-2xl backdrop-blur-md transition-all duration-300 sm:h-14 sm:w-14",
+              isAtLimit
+                ? "border-rose-400 bg-rose-500 text-white shadow-rose-500/30"
+                : "border-white/15 bg-white/10 text-white shadow-black/35 hover:-translate-y-1 hover:border-rose-300/70 hover:bg-rose-500/20 hover:text-rose-100",
+              isLoading && !isAtLimit ? "cursor-wait opacity-70" : "",
+              isDisabled ? "disabled:cursor-not-allowed" : "active:scale-95",
+            ].join(" ")}
+          >
+            <span
+              aria-hidden="true"
+              className={[
+                "leading-none transition-transform duration-300",
+                isAtLimit ? "scale-110" : "group-hover:scale-110",
+              ].join(" ")}
+            >
+              ♥
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Buy Me a Coffee Modal */}
+      {isCoffeeOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in-backdrop"
+          onClick={() => setIsCoffeeOpen(false)}
         >
-          ♥
-        </span>
-      </button>
+          <div
+            className="bg-[#121214]/98 border border-white/15 rounded-3xl p-8 max-w-[450px] w-full text-center shadow-3xl coffee-modal-animate"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {coffeeStep === "ask" ? (
+              <div className="animate-fade-slide-in">
+                <h3 className="bg-gradient-to-r from-amber-200 via-amber-300 to-yellow-400 bg-clip-text text-transparent font-extrabold text-3xl mb-4">
+                  Buy me a coffee? 
+                </h3>
+              
+                <div className="flex gap-4 justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setIsCoffeeOpen(false)}
+                    className="flex-1 px-5 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white font-semibold transition-all duration-200 active:scale-95"
+                  >
+                    No
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCoffeeStep("qris")}
+                    className="flex-1 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-black font-bold shadow-lg shadow-amber-500/20 transition-all duration-200 active:scale-95"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="animate-fade-slide-in">
+                <h3 className="bg-gradient-to-r from-pink-300 to-rose-400 bg-clip-text text-transparent font-extrabold text-3xl mb-2">
+                  Thank you! 💖
+                </h3>
+
+                <div className="relative mx-auto my-5 w-72 h-72 sm:w-80 sm:h-80 rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-white p-3 animate-qris-reveal">
+                  <img
+                    src="/images/qris.JPG"
+                    alt="QRIS Donasi"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsCoffeeOpen(false)}
+                  className="w-full mt-5 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold shadow-lg shadow-emerald-500/20 transition-all duration-200 active:scale-95"
+                >
+                  Done
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <style jsx global>{`
         @keyframes secret-like-float-up {
@@ -210,10 +299,70 @@ export default function FloatingLikeButton() {
           }
         }
 
+        @keyframes coffee-fade-in {
+          from {
+            opacity: 0;
+            transform: scale(0.92) translateY(15px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        @keyframes fade-in-backdrop {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes fade-slide-in {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes qris-reveal {
+          from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
         .secret-like-float {
           animation: secret-like-float-up 1s ease-out forwards;
         }
+
+        .coffee-modal-animate {
+          animation: coffee-fade-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .animate-fade-in-backdrop {
+          animation: fade-in-backdrop 0.2s ease-out forwards;
+        }
+
+        .animate-fade-slide-in {
+          animation: fade-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-qris-reveal {
+          opacity: 0;
+          animation: qris-reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+        }
       `}</style>
-    </div>
+    </>
   );
 }
+

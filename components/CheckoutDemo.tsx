@@ -153,7 +153,10 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
   const handlePaymentSubmit = () => {
     setStatus("processing");
     setTimeout(() => {
-      if (method === "qris") {
+      if (appliedPromoCode === "VIPJWM" || finalAmount === 0) {
+        setStatus("success");
+        if (onComplete) onComplete();
+      } else if (method === "qris") {
         setStatus("show_qris");
       } else {
         setStatus("success");
@@ -447,4 +450,4 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
       </motion.div>
     </section>
   );
-}
+} 
