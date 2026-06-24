@@ -3,7 +3,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
-type PaymentMethodId = "qris" | "debit";
+type PaymentMethodId = "qris" ;
 
 type PaymentMethod = {
   id: PaymentMethodId;
@@ -15,7 +15,7 @@ type PaymentMethod = {
 const paymentMethods: PaymentMethod[] = [
   {
     id: "qris",
-    name: "QRIS / Snap Instan",
+    name: "QRIS",
     detail: "",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4">
@@ -26,22 +26,37 @@ const paymentMethods: PaymentMethod[] = [
       </svg>
     ),
   },
-  {
-    id: "debit",
-    name: "Debit Instan / GPN",
-    detail: "",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4">
-        <rect x="2" y="5" width="20" height="14" rx="2" />
-        <line x1="2" y1="10" x2="22" y2="10" />
-      </svg>
-    ),
-  },
 ];
 
 function formatRupiah(value: number) {
-  if (value === 1) return "Rp 1";
   return `Rp ${value.toLocaleString("id-ID")}`;
+}
+
+const promoCodes = {
+  JOJOGG: {
+    label: "JOJOGG",
+    discountAmount: 70000,
+    freeAdmin: false,
+    successMessage: "✓ Kupon JOJOGG aktif! Diskon Rp 70.000.",
+  },
+  WLYM01: {
+    label: "WLYM01",
+    discountAmount: 50000,
+    freeAdmin: true,
+    successMessage: "✓ Kupon WLYM01 aktif! Diskon Rp 50.000 dan Bebas Biaya Admin!",
+  },
+  VIPJWM: {
+    label: "VIPJWM",
+    discountAmount: "full",
+    freeAdmin: true,
+    successMessage: "✓ CIHUYYY Kupon VIPJWM aktif! Total pembayaran menjadi Rp 0.",
+  },
+} as const;
+
+type PromoCode = keyof typeof promoCodes;
+
+function isPromoCode(value: string): value is PromoCode {
+  return value in promoCodes;
 }
 
 function PremiumQrCode({ pattern, isGlitching }: { pattern: boolean[]; isGlitching: boolean }) {
@@ -81,17 +96,21 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
   const [status, setStatus] = useState<"details" | "processing" | "show_qris" | "success">("details");
   const [countdown, setCountdown] = useState(900);
 
-  // States Tambahan Baru untuk mendukung kode promo JOJOGG tanpa merusak state utama
+  // States Tambahan Baru untuk mendukung kode promo tanpa merusak state utama
   const [promoInput, setPromoInput] = useState("");
-  const [promoApplied, setPromoApplied] = useState(false);
+  const [appliedPromoCode, setAppliedPromoCode] = useState<PromoCode | null>(null);
   const [promoError, setPromoError] = useState("");
 
-  const basePrice = 125000;
+  const basePrice = 100000;
   const adminFee = 2500;
-  // Alur kalkulasi diskon agar totalAmount menjadi Rp 1 saat promo JOJOGG aktif
-  const discount = promoApplied ? basePrice - 1 : 0;
-  const totalAmount = basePrice - discount;
-  const effectiveAdminFee = promoApplied ? 0 : adminFee;
+  const appliedPromo = appliedPromoCode ? promoCodes[appliedPromoCode] : null;
+  const discount = appliedPromo
+    ? appliedPromo.discountAmount === "full"
+      ? basePrice
+      : Math.min(appliedPromo.discountAmount, basePrice)
+    : 0;
+  const totalAmount = Math.max(basePrice - discount, 0);
+  const effectiveAdminFee = appliedPromo?.freeAdmin ? 0 : adminFee;
   const finalAmount = totalAmount + effectiveAdminFee;
 
   const transactionId = useMemo(() => `PAY-${checkoutId.replace(/:/g, "").toUpperCase().slice(0, 8)}`, [checkoutId]);
@@ -115,13 +134,20 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
   }, [status]);
 
   const applyPromoCode = () => {
-    if (promoInput.trim().toUpperCase() === "JOJOGG") {
-      setPromoApplied(true);
+    const normalizedPromoInput = promoInput.trim().toUpperCase();
+
+    if (isPromoCode(normalizedPromoInput)) {
+      setAppliedPromoCode(normalizedPromoInput);
       setPromoError("");
     } else {
       setPromoError("Kode promo tidak valid");
-      setPromoApplied(false);
+      setAppliedPromoCode(null);
     }
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    applyPromoCode();
   };
 
   const handlePaymentSubmit = () => {
@@ -129,19 +155,19 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
     setTimeout(() => {
       if (method === "qris") {
         setStatus("show_qris");
-        // Simulasi webhook callback otomatis: setelah 4 detik, beralih ke success
-        setTimeout(() => {
-          setStatus("processing");
-          setTimeout(() => {
-            setStatus("success");
-            if (onComplete) onComplete(); // Tetap memicu callback bawaan asli kamu
-          }, 1200);
-        }, 4000);
       } else {
         setStatus("success");
-        if (onComplete) onComplete(); // Tetap memicu callback bawaan asli kamu
+        if (onComplete) onComplete();
       }
     }, 1800);
+  };
+
+  const handleManualLanjut = () => {
+    setStatus("processing");
+    setTimeout(() => {
+      setStatus("success");
+      if (onComplete) onComplete();
+    }, 1200);
   };
 
   return (
@@ -186,7 +212,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                     {/* Animasi Harga Coret Khusus saat Kupon Aktif */}
                     <div className="text-right flex flex-col items-end shrink-0">
                       <AnimatePresence>
-                        {promoApplied && (
+                        {appliedPromo && (
                           <motion.span 
                             initial={{ opacity: 0, y: 2 }}
                             animate={{ opacity: 0.4, y: 0 }}
@@ -200,7 +226,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                         key={totalAmount}
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className={`text-sm font-black tracking-tight ${promoApplied ? "text-emerald-600 text-base font-black" : "text-slate-800"}`}
+                        className={`text-sm font-black tracking-tight ${appliedPromo ? "text-emerald-600 text-base font-black" : "text-slate-800"}`}
                       >
                         {formatRupiah(totalAmount)}
                       </motion.span>
@@ -240,30 +266,38 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                   })}
                 </div>
 
-                {/* KODE PROMO (JOJOGG) */}
+                {/* KODE PROMO */}
                 <div className="space-y-1.5">
-                  <div className="flex gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200/60 focus-within:border-slate-400 transition-colors">
+                  <form 
+                    onSubmit={handleFormSubmit}
+                    className="flex gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200/60 focus-within:border-slate-400 transition-colors"
+                  >
                     <input
                       value={promoInput}
                       onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                       placeholder="Masukkan Kode Promo"
-                      className="flex-1 bg-transparent px-3 py-1.5 text-sm font-medium outline-none placeholder:text-slate-400 tracking-wider"/>
-                  <button
-                    type="button"
-                    onClick={applyPromoCode}
-                    className="bg-slate-400 hover:bg-slate-900 text-xs font-bold px-2 py-2 rounded-lg transition active:scale-95 text-white">Gunakan
-                  </button>
-                </div>
+                      className="flex-1 bg-transparent px-3 py-1.5 text-sm font-medium outline-none placeholder:text-slate-400 tracking-wider"
+                    />
+                    <button
+                      type="submit"
+                      className="bg-slate-400 hover:bg-slate-900 text-xs font-bold px-2 py-2 rounded-lg transition active:scale-95 text-white"
+                    >
+                      Gunakan
+                    </button>
+                  </form>
                   {promoError && <span className="text-[10px] font-semibold text-red-500 pl-1 block">{promoError}</span>}
-                  {promoApplied && (
+                  {appliedPromo && (
                     <motion.span 
                       initial={{ opacity: 0, x: -2 }} 
                       animate={{ opacity: 1, x: 0 }} 
                       className="text-[10px] font-bold text-emerald-600 pl-1 block"
                     >
-                      ✓ CIHUYYY Kupon Aktif! Harga dipotong menjadi Rp 1.
+                      {appliedPromo.successMessage}
                     </motion.span>
                   )}
+                </div>
+                <div className="mt-auto">
+                    <p className="text-sm text-slate-500">Mau <a href="https://instagram.com/jovankawilyamm" target="_blank" rel="noopener noreferrer" className="text-amber-500 text-semibold">kode promo</a>? DM instagram, Slot terbatas 🤫🔥</p>
                 </div>
               </motion.div>
             )}
@@ -287,7 +321,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
               </motion.div>
             )}
 
-            {/* SCREEN 3: QRIS SCREEN GENERATED */}
+            {/* SCREEN 3: QRIS SCREEN IMAGE */}
             {status === "show_qris" && (
               <motion.div 
                 key="show_qris" 
@@ -296,13 +330,31 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center justify-center text-center py-4 flex-1 space-y-4"
               >
-                <PremiumQrCode pattern={qrPattern} isGlitching={promoApplied} />
+                <motion.div 
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="w-64 h-auto bg-white p-2 border border-slate-200/80 rounded-2xl shadow-lg relative flex items-center justify-center mx-auto"
+                >
+                  <img src="/images/qris.JPG" alt="QRIS Payment" className="w-full h-auto rounded-xl" />
+                </motion.div>
+                
                 <div className="space-y-1.5">
+                  <div className="bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-full inline-block">
+                    <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Total: {formatRupiah(finalAmount)}</p>
+                  </div>
                   <h3 className="text-sm font-bold text-slate-900">Scan Kode QRIS</h3>
                   <p className="text-xs text-slate-400 max-w-[240px] mx-auto leading-normal">
-                    {promoApplied ? "Sistem mendeteksi nominal khusus Rp 1. Selesaikan pembayaran sekarang..." : "Menunggu konfirmasi mutasi pembayaran e-wallet masuk secara otomatis..."}
+                    {finalAmount === 0 ? "Sistem mendeteksi total pembayaran Rp 0. Tekan lanjut untuk menyelesaikan transaksi." : "Silakan scan kode QRIS di atas dengan aplikasi e-wallet atau bank Anda."}
                   </p>
                 </div>
+
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleManualLanjut}
+                  className="w-full max-w-[200px] bg-slate-900 text-white text-xs font-bold py-3 rounded-xl shadow-md hover:bg-slate-800 transition-colors mt-2"
+                >
+                  Saya Sudah Bayar / Lanjut
+                </motion.button>
               </motion.div>
             )}
 
@@ -332,21 +384,21 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
           </AnimatePresence>
         </div>
 
-{/* BOTTOM ACTION BAR */}
+        {/* BOTTOM ACTION BAR */}
         {status === "details" && (
           <footer className="bg-slate-50 border-t border-slate-100 p-6 space-y-5">
             
             {/* RINCIAN HARGA DETAIL */}
             <div className="space-y-2 text-sm text-slate-500 border-b border-slate-200/60 pb-4">
               <div className="flex justify-between">
-                <span>Harga Game : {gameTitle}</span>
+                <span>Harga : {gameTitle}</span>
                 <span className="font-medium text-slate-700">{formatRupiah(basePrice)}</span>
               </div>
               
-              {promoApplied && (
+              {appliedPromo && (
                 <div className="flex justify-between text-emerald-600 font-medium">
-                  <span>Diskon Kupon (JOJOGG)</span>
-                  <span>-{formatRupiah(basePrice - 1)}</span>
+                  <span>Diskon Kupon ({appliedPromo.label})</span>
+                  <span>-{formatRupiah(discount)}</span>
                 </div>
               )}
 
@@ -360,6 +412,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                 <span className="font-semibold">{formatRupiah(effectiveAdminFee)}</span>
               </div>
             </div>
+            
 
             {/* ACTION BAR (TOTAL AKHIR & TOMBOL BAYAR) */}
             <div className="flex items-center justify-between">
@@ -369,7 +422,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                   key={finalAmount}
                   layout
                   className={`text-lg font-black tracking-tight ${
-                    promoApplied ? "text-emerald-600 text-xl" : "text-slate-950"
+                    appliedPromo ? "text-emerald-600 text-xl" : "text-slate-950"
                   }`}
                 >
                   {formatRupiah(finalAmount)}
@@ -380,7 +433,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                 whileTap={{ scale: 0.97 }}
                 onClick={handlePaymentSubmit}
                 className={`text-sm font-bold px-6 py-3 rounded-xl shadow-sm transition-colors ${
-                  promoApplied 
+                  appliedPromo 
                     ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-[0_4px_12px_rgba(16,185,129,0.2)]" 
                     : "bg-slate-800 hover:bg-slate-900 text-xs font-bold px-2 py-2 rounded-lg transition active:scale-95 text-white"
                 }`}

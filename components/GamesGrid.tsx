@@ -24,6 +24,7 @@ const games: Game[] = [
     tags: ["Game", "Neon", "Web", "2P"],
     description:
       "Interactive neon-themed hand hockey game with fast-paced gameplay and vibrant visuals.",
+      
   },
   {
     title: "Pic Game Puzzle",
@@ -33,6 +34,7 @@ const games: Game[] = [
     tags: ["Game", "Puzzle", "Web", "1P"],
     description:
       "Play with puzzle and camera, fun to play with friends.",
+
   },
   {
     title: "Cyber Connect",
@@ -42,13 +44,14 @@ const games: Game[] = [
     tags: ["Game", "Web", "Puzzle", "2P"],
     description:
       "Cyber Connect is a puzzle game where players must connect nodes to create secure pathways across a futuristic network grid.",
+      
   },
   {
     title: "Car Racer Cam",
     href: "https://car-racer-cam.vercel.app/",
     image: "/images/image.png",
     type: "Game",
-    tags: ["Game", "Race", "Web", "AI", "2P"],
+    tags: ["Game", "Race", "Web", "2P"],
     description:
       "Race with your car using your hands or noise!",
     isMaintenance: true,
