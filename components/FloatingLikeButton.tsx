@@ -178,7 +178,7 @@ export default function FloatingLikeButton() {
           </span>
         </button>
 
-        {/* Like Button Wrapper */}
+        {/* Like Button Wrapper */} 
         <div className="relative">
           {showFlyingNumber ? (
             <span
@@ -188,7 +188,7 @@ export default function FloatingLikeButton() {
               +1
             </span>
           ) : null}
-
+      
           <button
             type="button"
             aria-label={
@@ -208,15 +208,15 @@ export default function FloatingLikeButton() {
               isDisabled ? "disabled:cursor-not-allowed" : "active:scale-95",
             ].join(" ")}
           >
-            <span
+            <img
+              src="/images/klik-me.png"
+              alt="Like"
               aria-hidden="true"
               className={[
-                "leading-none transition-transform duration-300",
+                "w-12 h-12 sm:w-9 sm:h-9 object-contain transition-transform duration-300",
                 isAtLimit ? "scale-110" : "group-hover:scale-110",
               ].join(" ")}
-            >
-              ♥
-            </span>
+            />
           </button>
         </div>
       </div>
