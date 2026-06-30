@@ -97,7 +97,7 @@ const projects: Project[] = [
     tags: ["Website", "Tracking", "Documents"],
     description:
       "A website for tracking and sending documents and packages, with a simple and modern interface.",
-    /**isComingSoon: true, */
+    isComingSoon: true,
   },
 ];
 
