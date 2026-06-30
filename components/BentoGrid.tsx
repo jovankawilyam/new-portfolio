@@ -215,7 +215,7 @@ export default function BentoGrid() {
                       alt={`${project.title} preview`}
                       fill
                       sizes="(min-width: 1024px) 460px, (min-width: 640px) 430px, 82vw"
-                      className="object-contain p-4 opacity-95 transition-transform duration-700 group-hover:scale-105"
+                      className={`object-contain p-4 opacity-95 transition-transform duration-700 group-hover:scale-105 ${project.isComingSoon || project.isMaintenance ? 'blur-lg' : ''}`}
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-neutral-900 to-transparent" />
                   </div>
