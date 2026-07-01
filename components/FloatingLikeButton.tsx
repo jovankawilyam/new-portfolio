@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import PremiumConfetti from "./PremiumConfetti";
+import CelebrationVideo from "./CelebrationVideo";
 
 const LIKE_STORAGE_KEY = "web_portfolio_liked";
 const LIKE_COUNT_STORAGE_KEY = "web_portfolio_like_count";
@@ -49,6 +51,8 @@ export default function FloatingLikeButton() {
   // States untuk fitur Buy me a Coffee
   const [isCoffeeOpen, setIsCoffeeOpen] = useState(false);
   const [coffeeStep, setCoffeeStep] = useState<"ask" | "qris">("ask");
+  const [showThankYouVideo, setShowThankYouVideo] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
 
   const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -256,27 +260,62 @@ export default function FloatingLikeButton() {
               </div>
             ) : (
               <div className="animate-fade-slide-in">
-                <h3 className="bg-gradient-to-r from-pink-300 to-rose-400 bg-clip-text text-transparent font-extrabold text-3xl mb-2">
-                  Thank you! 💖
+                <h3 className="bg-gradient-to-r from-pink-300 to-rose-400 bg-clip-text text-transparent font-extrabold text-3xl mb-4">
+                 ↓   Scan Barcode ↓
                 </h3>
 
-                <div className="relative mx-auto my-5 w-72 h-72 sm:w-80 sm:h-80 rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-white p-3 animate-qris-reveal">
+                <div className="relative mx-auto my-6 w-72 h-72 sm:w-80 sm:h-80 rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-white p-3 animate-qris-reveal">
                   <img
-                    src="/images/qris.JPG"
+                    src="/images/qris2.jpg"
                     alt="QRIS Donasi"
                     className="w-full h-full object-contain"
                   />
                 </div>
+                <div className="text-white font-semibold">All Payment</div>
 
-                <button
-                  type="button"
-                  onClick={() => setIsCoffeeOpen(false)}
-                  className="w-full mt-5 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold shadow-lg shadow-emerald-500/20 transition-all duration-200 active:scale-95"
-                >
-                  Done
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowThankYouVideo(true);
+                      setShowFireworks(true);
+                      setIsCoffeeOpen(false);
+                    }}
+                    className="w-full mt-5 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold shadow-lg shadow-emerald-500/20 transition-all duration-200 active:scale-95"
+                  >
+                    Done
+                  </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Thank You Video Modal */}
+      {showThankYouVideo && (
+        <div
+          className="fixed inset-0 z-[110] flex items-center justify-center p-4"
+          onClick={() => setShowThankYouVideo(false)}
+        >
+          {/* Premium Confetti Canvas */}
+          <PremiumConfetti isActive={showFireworks} duration={3000} intensity="heavy" />
+
+          {/* Celebration Video with Animation */}
+          <CelebrationVideo isActive={showFireworks} duration={3000} />
+
+          <div
+            className="relative video-animation"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              autoPlay
+              muted
+              playsInline
+              className="w-64 h-auto block"
+              onEnded={() => setShowThankYouVideo(false)}
+            >
+              <source src="/assets/thankyou1.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       )}
@@ -360,6 +399,34 @@ export default function FloatingLikeButton() {
         .animate-qris-reveal {
           opacity: 0;
           animation: qris-reveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+        }
+
+        @keyframes video-zoom-in {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes bounce-slow {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+
+        .video-animation {
+          animation: video-zoom-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .animate-bounce-slow {
+          animation: bounce-slow 2s infinite;
         }
       `}</style>
     </>

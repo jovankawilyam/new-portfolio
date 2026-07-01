@@ -218,6 +218,13 @@ export default function BentoGrid() {
                       className={`object-contain p-4 opacity-95 transition-transform duration-700 group-hover:scale-105 ${project.isComingSoon || project.isMaintenance ? 'blur-lg' : ''}`}
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-neutral-900 to-transparent" />
+                    {project.isComingSoon && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                      <div className="rounded-full bg-amber-500 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-black">
+                          Coming Soon!
+                      </div>
+                    </div>
+                  )}
                   </div>
 
                   <div className="flex min-h-0 flex-1 flex-col p-4 sm:p-6 [@media_(max-height:820px)]:lg:p-4">

@@ -338,7 +338,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                   animate={{ scale: 1, opacity: 1 }}
                   className="w-64 h-auto bg-white p-2 border border-slate-200/80 rounded-2xl shadow-lg relative flex items-center justify-center mx-auto"
                 >
-                  <img src="/images/qris.JPG" alt="QRIS Payment" className="w-full h-auto rounded-xl" />
+                  <img src="/images/qris2.JPG" alt="QRIS Payment" className="w-full h-auto rounded-xl" />
                 </motion.div>
                 
                 <div className="space-y-1.5">
