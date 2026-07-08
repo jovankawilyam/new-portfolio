@@ -20,12 +20,12 @@ const games: Game[] = [
   {
     title: "Neon Hand Hockey",
     href: "https://gameneonhandhockey-byjovanka.vercel.app/",
-    image: "/images/game-neon.png",
+    image: "/images/image.png",
     type: "Arcade Game",
     tags: ["Game", "Neon", "Web", "2P"],
     description:
       "Interactive neon-themed hand hockey game with fast-paced gameplay and vibrant visuals.",
-      
+    isMaintenance: true,
   },
   {
     title: "Pic Game Puzzle",
