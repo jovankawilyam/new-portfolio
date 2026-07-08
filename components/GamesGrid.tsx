@@ -68,14 +68,14 @@ const games: Game[] = [
     isComingSoon: false,
   },
   {
-    title: "Finger Rhythm",
-    href: "https://finger-rhythm.vercel.app/",
-    image: "/images/comingsoon.png",
+    title: "Gesture Rush",
+    href: "https://gesture-rush.vercel.app/",
+    image: "/images/gesture-rush.png",
     type: "Game",
     tags: ["Game", "Rhythm", "Web", "2P"],
     description:
       "Test your finger rhythm and speed with this fun and addictive game!",
-    isComingSoon: true,
+    isComingSoon: false,
   },
 ];
 
