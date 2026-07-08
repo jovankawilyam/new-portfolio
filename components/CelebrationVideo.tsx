@@ -15,13 +15,13 @@ export default function CelebrationVideo({
 
   useEffect(() => {
     if (isActive) {
-      setShowVideo(true);
+      const showTimer = setTimeout(() => setShowVideo(true), 0);
+      const hideTimer = setTimeout(() => setShowVideo(false), duration);
 
-      const timer = setTimeout(() => {
-        setShowVideo(false);
-      }, duration);
-
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
     }
   }, [isActive, duration]);
 

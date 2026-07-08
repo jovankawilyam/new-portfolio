@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
 
 type Project = {
@@ -126,7 +126,7 @@ export default function BentoGrid() {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     function measureProjectTrack() {
       const viewport = viewportRef.current;
       const track = trackRef.current;

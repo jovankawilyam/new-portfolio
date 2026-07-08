@@ -29,7 +29,9 @@ const paymentMethods: PaymentMethod[] = [
 ];
 
 function formatRupiah(value: number) {
-  return `Rp ${value.toLocaleString("id-ID")}`;
+  const int = Math.floor(value);
+  const formatted = int.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return `Rp ${formatted}`;
 }
 
 const promoCodes = {
@@ -57,36 +59,6 @@ type PromoCode = keyof typeof promoCodes;
 
 function isPromoCode(value: string): value is PromoCode {
   return value in promoCodes;
-}
-
-function PremiumQrCode({ pattern, isGlitching }: { pattern: boolean[]; isGlitching: boolean }) {
-  const size = Math.sqrt(pattern.length);
-  return (
-    <motion.div 
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="w-44 h-44 bg-white p-3 border border-slate-200/80 rounded-2xl shadow-inner relative flex items-center justify-center mx-auto"
-    >
-      <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full shape-rendering-crispedges">
-        {pattern.map((filled, i) => {
-          const x = i % size;
-          const y = Math.floor(i / size);
-          return filled ? (
-            <rect key={i} x={x} y={y} width="1" height="1" fill={isGlitching ? "#10b981" : "#0f172a"} className="transition-colors duration-500" />
-          ) : null;
-        })}
-      </svg>
-      {/* Scanner Radar Line Animation */}
-      <motion.div 
-        animate={{ translateY: ["0px", "150px", "0px"] }}
-        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-        className="absolute left-0 right-0 h-0.5 bg-emerald-500/50 shadow-[0_0_8px_#10b981] opacity-70 pointer-events-none"
-      />
-      <div className="absolute w-8 h-8 bg-white border border-slate-100 rounded-lg shadow flex items-center justify-center font-black text-[8px] text-slate-900 tracking-tighter">
-        QRIS
-      </div>
-    </motion.div>
-  );
 }
 
 // Tetap mempertahankan properti bawaan asli dari awal (onComplete, gameTitle, dll)
@@ -176,7 +148,6 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
   return (
     <section className="min-h-screen w-full bg-[#f8fafc] px-4 py-12 text-slate-900 antialiased font-sans flex items-center justify-center">
       <motion.div 
-        layout
         className="w-full max-w-[400px] bg-white border border-slate-200 rounded-3xl shadow-[0_20px_50px_rgba(15,23,42,0.06)] overflow-hidden flex flex-col justify-between"
       >
         {/* HEADER BAR */}
@@ -261,7 +232,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                         </div>
                         <div className="flex items-center justify-center">
                           <div className={`h-4 w-4 rounded-full border flex items-center justify-center transition-all ${isSelected ? "border-slate-900" : "border-slate-300"}`}>
-                            {isSelected && <motion.div layoutId="activeIndicator" className="h-2 w-2 rounded-full bg-slate-900" />}
+                            {isSelected && <motion.div className="h-2 w-2 rounded-full bg-slate-900" />}
                           </div>
                         </div>
                       </button>
@@ -338,7 +309,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                   animate={{ scale: 1, opacity: 1 }}
                   className="w-64 h-auto bg-white p-2 border border-slate-200/80 rounded-2xl shadow-lg relative flex items-center justify-center mx-auto"
                 >
-                  <img src="/images/qris2.JPG" alt="QRIS Payment" className="w-full h-auto rounded-xl" />
+                  <img src="/images/qris2.jpg" alt="QRIS Payment" className="w-full h-auto rounded-xl" />
                 </motion.div>
                 
                 <div className="space-y-1.5">
@@ -423,7 +394,6 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
                 <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Total Akhir</span>
                 <motion.span 
                   key={finalAmount}
-                  layout
                   className={`text-lg font-black tracking-tight ${
                     appliedPromo ? "text-emerald-600 text-xl" : "text-slate-950"
                   }`}

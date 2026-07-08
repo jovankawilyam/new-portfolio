@@ -29,7 +29,7 @@ export default function Achievements() {
   const rightColumn = achievements.slice(6);
 
   return (
-    <section id="experience" className="relative z-20 bg-neutral-950 px-4 py-24 sm:px-6 md:px-8">
+    <section id="achievements" className="relative z-20 bg-neutral-950 px-4 py-24 sm:px-6 md:px-8">
       <div className="mx-auto max-w-7xl">
         <Reveal>
           <div className="mb-16 text-left md:text-center">

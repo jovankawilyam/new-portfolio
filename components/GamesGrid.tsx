@@ -58,14 +58,14 @@ const games: Game[] = [
     isMaintenance: true,
   },
   {
-    title: "Mounth Munchers",
-    href: "https://mounth-muncher-game.vercel.app/",
-    image: "/images/comingsoon.png",
+    title: "Mounth Battle",
+    href: "https://mounth-battle.vercel.app/",
+    image: "/images/mounth-battle.png",
     type: "Game",
-    tags: ["Game", "Race", "Web", "2P"],
+    tags: ["Game", "Battle", "Web", "2P"],
     description:
       "Aim your mouth at the target",
-    isComingSoon: true,
+    isComingSoon: false,
   },
   {
     title: "Finger Rhythm",
