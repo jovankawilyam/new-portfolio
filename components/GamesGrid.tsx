@@ -14,17 +14,19 @@ type Game = {
   description: string;
   isMaintenance?: boolean;
   isComingSoon?: boolean;
+  version?: string;
 };
 
 const games: Game[] = [
   {
     title: "Neon Hand Hockey",
     href: "https://gameneonhandhockey-byjovanka.vercel.app/",
-    image: "/images/image.png",
+    image: "/images/maintance.png",
     type: "Arcade Game",
     tags: ["Game", "Neon", "Web", "2P"],
     description:
       "Interactive neon-themed hand hockey game with fast-paced gameplay and vibrant visuals.",
+    version: "1.0",
     isMaintenance: true,
   },
   {
@@ -35,6 +37,8 @@ const games: Game[] = [
     tags: ["Game", "Puzzle", "Web", "1P"],
     description:
       "Play with puzzle and camera, fun to play with friends.",
+    version: "1.0",
+    isMaintenance: false,
 
   },
   {
@@ -45,16 +49,19 @@ const games: Game[] = [
     tags: ["Game", "Web", "Puzzle", "2P"],
     description:
       "Cyber Connect is a puzzle game where players must connect nodes to create secure pathways across a futuristic network grid.",
+    version: "1.1",
+    isMaintenance: false,
       
   },
   {
     title: "Car Racer Cam",
     href: "https://car-racer-cam.vercel.app/",
-    image: "/images/image.png",
+    image: "/images/maintance.png",
     type: "Game",
     tags: ["Game", "Race", "Web", "2P"],
     description:
       "Race with your car using your hands or noise!",
+    version: "1.1",
     isMaintenance: true,
   },
   {
@@ -65,6 +72,7 @@ const games: Game[] = [
     tags: ["Game", "Battle", "Web", "2P"],
     description:
       "Aim your mouth at the target",
+    version: "1.0",
     isComingSoon: false,
   },
   {
@@ -75,7 +83,30 @@ const games: Game[] = [
     tags: ["Game", "Rhythm", "Web", "2P"],
     description:
       "Test your finger rhythm and speed with this fun and addictive game!",
+    version: "1.0",
     isComingSoon: false,
+  },
+  {
+    title: "Adu Jari",
+    href: "https://adu-jari.vercel.app/",
+    image: "/images/adu-jari.png",
+    type: "Game",
+    tags: ["Game", "Rhythm", "Web", "2P"],
+    description:
+      "Adu Jari is a fun and addictive game that will test your finger rhythm and speed!",
+    version: "1.0",
+    isComingSoon: false,
+  },
+  {
+    title: "Duel Kata",
+    href: "https://duel-kata.vercel.app/",
+    image: "/images/comingsoon.png",
+    type: "Game",
+    tags: ["Game", "Word", "Web", "2P"],
+    description:
+      "Duel Kata is a fun and addictive word game that will test your vocabulary and speed!",
+    version: "1.0",
+    isComingSoon: true,
   },
 ];
 
@@ -180,9 +211,17 @@ export default function GamesGrid() {
                     <span className="text-xs font-bold uppercase tracking-widest text-amber-500">
                       {game.type}
                     </span>
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black">
-                        {game.isMaintenance ? "!" : game.isComingSoon ? "★" : "→"}
-                    </span>
+                    <span className={`shrink-0 rounded-full border border-white/10 text-amber-500 transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black ${
+                        game.isMaintenance || game.isComingSoon 
+                            ? "grid h-10 w-10 place-items-center text-sm" 
+                            : "px-3 py-1 text-xs font-semibold"
+                    }`}>
+                        {game.isMaintenance 
+                            ? "!" 
+                            : game.isComingSoon 
+                            ? "★" 
+                            : `v ${game.version || "1.0"}`}
+                      </span>
                   </div>
 
                   <h3 className="mb-3 text-2xl font-bold leading-tight">
