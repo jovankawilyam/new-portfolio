@@ -36,6 +36,16 @@ const photobooth: Game[] = [
       "Automatic browser-based photobooth experience with themed output and simple capture flow.",
       
   },
+  {
+    title: "Photobooth Birthday",
+    href: "https://birthday-nayla.vercel.app/",
+    image: "/images/photobooth-birthday.png",
+    type: "Creative Tool",
+    tags: ["Camera", "UI", "Photo"],
+    description:
+      "Automatic browser-based photobooth experience with themed output and simple capture flow.",
+      
+  },
 ];
 
 function isExternalLink(href: string) {

@@ -99,14 +99,14 @@ const games: Game[] = [
   },
   {
     title: "Duel Kata",
-    href: "https://duel-kata.vercel.app/",
-    image: "/images/comingsoon.png",
+    href: "https://adu-kata.vercel.app/",
+    image: "/images/adu-kata.png",
     type: "Game",
     tags: ["Game", "Word", "Web", "2P"],
     description:
-      "Duel Kata is a fun and addictive word game that will test your vocabulary and speed!",
+      "Adu Kata is a fun and addictive word game that will test your vocabulary and speed!",
     version: "1.0",
-    isComingSoon: true,
+    isComingSoon: false,
   },
 ];
 
