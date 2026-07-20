@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import PremiumConfetti from "./PremiumConfetti";
 import CelebrationVideo from "./CelebrationVideo";
+import CommentsDrawer from "./CommentsDrawer";
 
 const LIKE_STORAGE_KEY = "web_portfolio_liked";
 const LIKE_COUNT_STORAGE_KEY = "web_portfolio_like_count";
@@ -53,6 +54,9 @@ export default function FloatingLikeButton() {
   const [coffeeStep, setCoffeeStep] = useState<"ask" | "qris">("ask");
   const [showThankYouVideo, setShowThankYouVideo] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
+
+  // State untuk fitur Comments Drawer
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
 
   const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -162,7 +166,7 @@ export default function FloatingLikeButton() {
 
   return (
     <>
-      <div className="fixed bottom-5 right-5 z-50 sm:bottom-7 sm:right-7 flex flex-col gap-3 items-center">
+      <div className="fixed bottom-5 right-5 z-50 sm:bottom-7 sm:right-7 flex flex-row gap-3 items-center">
         {/* Buy Me a Coffee Button */}
         <button
           type="button"
@@ -179,6 +183,22 @@ export default function FloatingLikeButton() {
             className="leading-none transition-transform duration-300 group-hover:scale-110"
           >
             ☕
+          </span>
+        </button>
+
+        {/* Comment Button */}
+        <button
+          type="button"
+          aria-label="Open comments"
+          title="Open comments"
+          onClick={() => setIsCommentsOpen(true)}
+          className="group grid h-[52px] w-[52px] place-items-center rounded-full border border-white/15 bg-white/10 text-white text-2xl shadow-2xl backdrop-blur-md transition-all duration-300 sm:h-14 sm:w-14 hover:-translate-y-1 hover:border-blue-300/70 hover:bg-blue-500/20 hover:text-blue-100 active:scale-95"
+        >
+          <span
+            aria-hidden="true"
+            className="leading-none transition-transform duration-300 group-hover:scale-110"
+          >
+            💬
           </span>
         </button>
 
@@ -206,7 +226,7 @@ export default function FloatingLikeButton() {
             className={[
               "group grid h-[52px] w-[52px] place-items-center rounded-full border text-2xl shadow-2xl backdrop-blur-md transition-all duration-300 sm:h-14 sm:w-14",
               isAtLimit
-                ? "border-rose-400 bg-rose-500 text-white shadow-rose-500/30"
+                ? "border-rose-400 bg-rose-500/80 text-white shadow-rose-500/30"
                 : "border-white/15 bg-white/10 text-white shadow-black/35 hover:-translate-y-1 hover:border-rose-300/70 hover:bg-rose-500/20 hover:text-rose-100",
               isLoading && !isAtLimit ? "cursor-wait opacity-70" : "",
               isDisabled ? "disabled:cursor-not-allowed" : "active:scale-95",
@@ -319,6 +339,9 @@ export default function FloatingLikeButton() {
           </div>
         </div>
       )}
+
+      {/* Comments Drawer */}
+      <CommentsDrawer isOpen={isCommentsOpen} setIsOpen={setIsCommentsOpen} />
 
       <style jsx global>{`
         @keyframes secret-like-float-up {
