@@ -139,7 +139,6 @@ export default function FloatingLikeButton() {
           userAgent: navigator.userAgent,
           referrer: document.referrer,
           sessionId: getLikeSessionId(),
-          extra: "",
         }),
       });
       const raw = await response.text();

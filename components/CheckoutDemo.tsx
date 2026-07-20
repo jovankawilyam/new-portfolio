@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
 type PaymentMethodId = "qris" ;
@@ -63,10 +63,9 @@ function isPromoCode(value: string): value is PromoCode {
 
 // Tetap mempertahankan properti bawaan asli dari awal (onComplete, gameTitle, dll)
 export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access Plan" }: { onComplete?: () => void; gameTitle?: string }) {
-  const checkoutId = useId();
   const [method, setMethod] = useState<PaymentMethodId>("qris");
   const [status, setStatus] = useState<"details" | "processing" | "show_qris" | "success">("details");
-  const [countdown, setCountdown] = useState(900);
+  const [, setCountdown] = useState(900);
 
   // States Tambahan Baru untuk mendukung kode promo tanpa merusak state utama
   const [promoInput, setPromoInput] = useState("");
@@ -85,19 +84,7 @@ export default function CheckoutDemo({ onComplete, gameTitle = "Premium Access P
   const effectiveAdminFee = appliedPromo?.freeAdmin ? 0 : adminFee;
   const finalAmount = totalAmount + effectiveAdminFee;
 
-  const transactionId = useMemo(() => `PAY-${checkoutId.replace(/:/g, "").toUpperCase().slice(0, 8)}`, [checkoutId]);
 
-  const qrPattern = useMemo(() => {
-    return Array.from({ length: 225 }, (_, i) => {
-      const size = 15;
-      const x = i % size;
-      const y = Math.floor(i / size);
-      if ((x < 4 && y < 4) || (x > 10 && y < 4) || (x < 4 && y > 10)) {
-        return (x === 0 || x === 3 || y === 0 || y === 3) || (x === 11 || x === 14 || y === 0 || y === 3) || (x === 0 || x === 3 || y === 11 || y === 14);
-      }
-      return (i * 7 + transactionId.charCodeAt(i % 4)) % 3 === 0;
-    });
-  }, [transactionId]);
 
   useEffect(() => {
     if (status === "success") return;

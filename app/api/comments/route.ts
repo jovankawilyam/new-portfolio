@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const DEFAULT_APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzK_q-GoZWyQjIySzo89vjixub6e06INpCSLaOqZUTp9ISK4XXseXWNJMf5mla9bkQx2A/exec";
+  "https://script.google.com/macros/s/AKfycbzPD6Dq8zWufaZlApPPqKQ-JZZ94AEnn5zG0EA8BKhgNZaYgXtuxz0oa5gmP-WL34aSvw/exec";
 const APPS_SCRIPT_URL =
   process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ?? DEFAULT_APPS_SCRIPT_URL;
 
@@ -46,9 +46,10 @@ async function forwardToAppsScript(request: NextRequest) {
         "content-type": responseContentType,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: `Failed to connect to Apps Script: ${error.message}` },
+      { error: `Failed to connect to Apps Script: ${message}` },
       { status: 500 },
     );
   }

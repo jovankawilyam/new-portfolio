@@ -37,7 +37,7 @@ async function tanyaGemini() {
         const fallbackResult = await fallbackModel.generateContent(prompt);
         console.log("\n(Berhasil menggunakan fallback: gemini-pro)");
         console.log(fallbackResult.response.text());
-      } catch (e) {
+      } catch {
         console.log("❌ Gagal juga menggunakan model fallback.");
       }
     }

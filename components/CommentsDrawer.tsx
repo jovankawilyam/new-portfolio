@@ -7,11 +7,9 @@ const COMMENTS_API_ROUTE = "/api/comments";
 const COMMENT_SESSION_STORAGE_KEY = "web_portfolio_comment_session";
 
 type Comment = {
-  id: string;
   name: string;
   content: string;
   timestamp: string;
-  sessionId: string;
 };
 
 type CommentsApiResponse = {
@@ -47,7 +45,9 @@ export default function CommentsDrawer({
   const [newCommentName, setNewCommentName] = useState("");
   const [newCommentContent, setNewCommentContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const commentsEndRef = useRef<HTMLDivElement>(null);
+  const MAX_COMMENT_LENGTH = 500;
 
   const fetchComments = async () => {
     setIsLoading(true);
@@ -68,6 +68,7 @@ export default function CommentsDrawer({
 
   useEffect(() => {
     if (isOpen) {
+      setErrorMessage("");
       fetchComments();
     }
   }, [isOpen]);
@@ -76,6 +77,7 @@ export default function CommentsDrawer({
     e.preventDefault();
     if (!newCommentContent.trim() || isSubmitting) return;
 
+    setErrorMessage("");
     setIsSubmitting(true);
     const sessionId = getCommentSessionId();
     const name = newCommentName.trim() || "Anonymous";
@@ -99,11 +101,11 @@ export default function CommentsDrawer({
         }
       } else {
         console.error("Failed to post comment:", data.error || data.message);
-        alert("Failed to post comment: " + (data.error || data.message));
+        setErrorMessage(data.error || data.message || "Failed to post comment.");
       }
     } catch (error) {
       console.error("Error posting comment:", error);
-      alert("Error posting comment.");
+      setErrorMessage("Error posting comment. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +113,17 @@ export default function CommentsDrawer({
 
   const timeAgo = (dateString: string) => {
     const now = new Date();
-    const date = new Date(dateString);
+    const parts = dateString.split(' ');
+    const dateParts = parts[0].split('/');
+    const timeParts = parts[1].split(':');
+    const date = new Date(
+      parseInt(dateParts[2], 10),
+      parseInt(dateParts[1], 10) - 1,
+      parseInt(dateParts[0], 10),
+      parseInt(timeParts[0], 10),
+      parseInt(timeParts[1], 10),
+      parseInt(timeParts[2], 10)
+    );
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
     let interval = seconds / 31536000;
@@ -166,8 +178,8 @@ export default function CommentsDrawer({
               ) : comments.length === 0 ? (
                 <p className="text-center text-neutral-500 mt-8">No comments yet. Be the first to comment!</p>
               ) : (
-                comments.map((comment) => (
-                  <div key={comment.id} className="flex items-start space-x-3">
+                comments.map((comment, index) => (
+                  <div key={index} className="flex items-start space-x-3">
                     <div className="flex-shrink-0 h-10 w-10 rounded-full bg-amber-500 flex items-center justify-center text-black font-bold text-sm">
                       {comment.name.charAt(0).toUpperCase()}
                     </div>
@@ -197,10 +209,19 @@ export default function CommentsDrawer({
                 placeholder="Add a comment..."
                 value={newCommentContent}
                 onChange={(e) => setNewCommentContent(e.target.value)}
+                maxLength={MAX_COMMENT_LENGTH}
                 className="w-full p-2 rounded-md bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:border-blue-500 resize-y min-h-[60px]"
                 rows={3}
                 required
               ></textarea>
+              <div className="flex justify-between items-center mt-1">
+                <p className={`text-xs ${newCommentContent.length > MAX_COMMENT_LENGTH ? 'text-red-400' : 'text-neutral-500'}`}>
+                  {newCommentContent.length}/{MAX_COMMENT_LENGTH}
+                </p>
+                {errorMessage && (
+                  <p className="text-xs text-red-400">{errorMessage}</p>
+                )}
+              </div>
               <button
                 type="submit"
                 disabled={isSubmitting || !newCommentContent.trim()}
