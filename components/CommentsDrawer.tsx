@@ -113,17 +113,24 @@ export default function CommentsDrawer({
 
   const timeAgo = (dateString: string) => {
     const now = new Date();
-    const parts = dateString.split(' ');
-    const dateParts = parts[0].split('/');
-    const timeParts = parts[1].split(':');
-    const date = new Date(
-      parseInt(dateParts[2], 10),
-      parseInt(dateParts[1], 10) - 1,
-      parseInt(dateParts[0], 10),
-      parseInt(timeParts[0], 10),
-      parseInt(timeParts[1], 10),
-      parseInt(timeParts[2], 10)
-    );
+    let date: Date;
+
+    if (dateString.includes('/') && dateString.includes(':')) {
+      const parts = dateString.split(' ');
+      const dateParts = parts[0].split('/');
+      const timeParts = parts[1].split(':');
+      date = new Date(
+        parseInt(dateParts[2], 10),
+        parseInt(dateParts[1], 10) - 1,
+        parseInt(dateParts[0], 10),
+        parseInt(timeParts[0], 10),
+        parseInt(timeParts[1], 10),
+        parseInt(timeParts[2], 10)
+      );
+    } else {
+      date = new Date(dateString);
+    }
+
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
     let interval = seconds / 31536000;

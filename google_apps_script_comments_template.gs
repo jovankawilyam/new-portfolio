@@ -108,27 +108,32 @@ function formatTimestamp(date) {
   const hh = String(date.getHours()).padStart(2, '0');
   const mi = String(date.getMinutes()).padStart(2, '0');
   const ss = String(date.getSeconds()).padStart(2, '0');
-  return `${dd}/${mm}/${yyyy} ${hh}:${mi}:${ss}`;
+  return dd + "/" + mm + "/" + yyyy + " " + hh + ":" + mi + ":" + ss;
 }
 
 function parseCustomDate(dateString) {
   if (!dateString) return new Date(0);
-  const parts = dateString.split(' ');
-  const dateParts = parts[0].split('/');
-  const timeParts = parts[1].split(':');
-  return new Date(
-    parseInt(dateParts[2], 10),
-    parseInt(dateParts[1], 10) - 1,
-    parseInt(dateParts[0], 10),
-    parseInt(timeParts[0], 10),
-    parseInt(timeParts[1], 10),
-    parseInt(timeParts[2], 10)
-  );
+
+  if (dateString.indexOf('/') !== -1 && dateString.indexOf(':') !== -1) {
+    var parts = dateString.split(' ');
+    var dateParts = parts[0].split('/');
+    var timeParts = parts[1].split(':');
+    return new Date(
+      parseInt(dateParts[2], 10),
+      parseInt(dateParts[1], 10) - 1,
+      parseInt(dateParts[0], 10),
+      parseInt(timeParts[0], 10),
+      parseInt(timeParts[1], 10),
+      parseInt(timeParts[2], 10)
+    );
+  }
+
+  return new Date(dateString);
 }
 
 function getSheetByName(sheetName) {
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = spreadsheet.getSheetByName(sheetName);
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = spreadsheet.getSheetByName(sheetName);
 
   if (!sheet) {
     sheet = spreadsheet.insertSheet(sheetName);

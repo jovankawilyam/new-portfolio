@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const DEFAULT_APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzPD6Dq8zWufaZlApPPqKQ-JZZ94AEnn5zG0EA8BKhgNZaYgXtuxz0oa5gmP-WL34aSvw/exec";
+  "https://script.google.com/macros/s/AKfycbzG832_V9DsYbn_T31DRkncqQ8QF8g7KUesF991mRWepWAOitT3zvDP_ZXkuDT0O2j61g/exec";
 const APPS_SCRIPT_URL =
   process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ?? DEFAULT_APPS_SCRIPT_URL;
 
