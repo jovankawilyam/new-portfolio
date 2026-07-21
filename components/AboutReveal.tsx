@@ -76,22 +76,20 @@ function Char({
 import Reveal from "@/components/Reveal";
 
 const skills = [
-  { name: "HTML", detail: "Semantic markup" },
-  { name: "CSS", detail: "Responsive styling" },
-  { name: "JavaScript", detail: "Interactive UI" },
-  { name: "TypeScript", detail: "Typed frontend" },
-  { name: "React", detail: "Component apps" },
-  { name: "Laravel", detail: "Web backend" },
-  { name: "Python", detail: "Data analysis" },
-  { name: "Power BI", detail: "Dashboard insight" },
-  { name: "Tableau", detail: "Data visualization" },
-  { name: "REST API", detail: "Service integration" },
+  { name: "HTML", icon: "html" },
+  { name: "CSS", icon: "css" },
+  { name: "JavaScript", icon: "js" },
+  { name: "TypeScript", icon: "ts" },
+  { name: "React", icon: "react" },
+  { name: "Laravel", icon: "laravel" },
+  { name: "Python", icon: "py" },
+  { name: "Bootstrap", icon: "bootstrap" },
+  { name: "Tailwind", icon: "tailwind" },
+  { name: "GitHub", icon: "github" },
+  { name: "Vercel", icon: "vercel" },
 ];
 
 export default function AboutReveal() {
-  const leftSkills = skills.slice(0, 5);
-  const rightSkills = skills.slice(5);
-
   return (
     <section
       id="about"
@@ -121,29 +119,22 @@ export default function AboutReveal() {
             adaptability, leadership, and team collaboration through my role in
             Himpunan Mahasiswa Sistem Informasi.
           </ScrollRevealText>
-          <div className="grid gap-4 md:grid-cols-2 md:gap-6">
-            <div className="space-y-3">
-              {leftSkills.map((skill) => (
-                <SkillCard
+          <div className="space-y-6">
+            <p className="text-amber-500 font-medium uppercase tracking-widest text-left">
+              TECHNOLOGIES
+            </p>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 md:gap-8">
+              {skills.map((skill) => (
+                <img
                   key={skill.name}
-                  {...skill}
-                  direction="left"
-                />
-              ))}
-            </div>
-            <div className="space-y-3">
-              {rightSkills.map((skill) => (
-                <SkillCard
-                  key={skill.name}
-                  {...skill}
-                  direction="right"
+                  src={`https://skillicons.dev/icons?i=${skill.icon}`}
+                  alt={skill.name}
+                  title={skill.name}
+                  className="h-10 w-10 md:h-14 md:w-14 transition-transform hover:scale-110"
                 />
               ))}
             </div>
           </div>
-
-
-
           <Reveal>
             <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start">
               <a
@@ -180,38 +171,3 @@ export default function AboutReveal() {
   );
 }
 
-function SkillCard({
-  name,
-  detail,
-  direction,
-}: {
-  name: string;
-  detail: string;
-  direction: "left" | "right";
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.96", "start 0.54"],
-  });
-  const opacity = useTransform(scrollYProgress, [0, 0.28, 1], [0, 0.9, 1]);
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [direction === "left" ? -120 : 120, 0],
-  );
-  const blur = useTransform(scrollYProgress, [0, 1], ["blur(10px)", "blur(0px)"]);
-
-  return (
-    <motion.div
-      ref={ref}
-      style={{ opacity, x, filter: blur }}
-      className="group flex origin-center transform-gpu items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-left transition hover:-translate-y-1 hover:border-amber-500/70 hover:bg-amber-500/10"
-    >
-      <span className="text-lg font-black tracking-tight text-white">{name}</span>
-      <span className="text-sm font-medium text-neutral-400 transition group-hover:text-amber-200">
-        {detail}
-      </span>
-    </motion.div>
-  );
-}

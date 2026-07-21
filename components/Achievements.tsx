@@ -58,7 +58,7 @@ const row2 = achievements.slice(4, 8);
 const row3 = achievements.slice(8, 11);
 
 export default function Achievements() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
 
@@ -79,20 +79,18 @@ export default function Achievements() {
           y: -700,
           rotateX: 15,
           rotateZ: 20,
-          opacity: 0.15,
-          scale: 0.95,
+          opacity: 0.2,
         },
         {
           y: 0,
           rotateX: 0,
           rotateZ: 0,
           opacity: 1,
-          scale: 1,
           scrollTrigger: {
             trigger: section,
             start: "top bottom",
-            end: "top 20%",
-            scrub: 2,
+            end: "top top",
+            scrub: 1.5,
           },
           ease: "none",
         },
@@ -109,13 +107,14 @@ export default function Achievements() {
 
   return (
     <section
-      ref={sectionRef}
       id="achievements"
-      className="relative z-20 overflow-hidden bg-neutral-950"
-      style={{ height: "200vh" }}
+      className="relative z-20 overflow-hidden bg-neutral-950 py-0"
     >
-      <div className="sticky top-0 flex min-h-svh flex-col justify-center overflow-hidden px-4 py-20 sm:py-28 md:px-8 md:py-36 [perspective:1000px] [transform-style:preserve-3d]">
-        <div className="mx-auto w-full max-w-7xl">
+      <div
+        ref={sectionRef}
+        className="h-[200vh] md:h-[200vh] overflow-hidden antialiased relative flex flex-col self-auto py-12 md:py-20 lg:py-40 [perspective:1000px] [transform-style:preserve-3d]"
+      >
+        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8">
           <Reveal>
             <div className="mb-12 text-left md:text-center">
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-amber-500">
@@ -126,16 +125,18 @@ export default function Achievements() {
               </h2>
             </div>
           </Reveal>
+        </div>
 
-          <div
-            ref={wrapperRef}
-            className="space-y-4 sm:space-y-5 lg:space-y-6"
-            style={{
-              opacity: 0.15,
-              transform:
-                "translateY(-700px) rotateX(15deg) rotateZ(20deg) scale(0.95)",
-            }}
-          >
+        <div
+          ref={wrapperRef}
+          className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8"
+          style={{
+            opacity: 0.2,
+            transform:
+              "translateY(-700px) rotateX(15deg) rotateZ(20deg)",
+          }}
+        >
+          <div className="space-y-4 sm:space-y-5 lg:space-y-6">
             <AchievementRow items={row1} reversed />
             <AchievementRow items={row2} />
             <AchievementRow items={row3} reversed />
@@ -161,51 +162,6 @@ function AchievementRow({
         <AchievementCard key={item.title} item={item} />
       ))}
     </div>
-  );
-}
-
-function TrophyIcon({ className }: { className: string }) {
-  return (
-    <svg viewBox="0 0 48 48" fill="none" className={className}>
-      <path
-        d="M14 6h20v14a10 10 0 01-10 10 10 10 0 01-10-10V6z"
-        fill="currentColor"
-        opacity="0.85"
-      />
-      <path
-        d="M8 14a5 5 0 010-10"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M40 14a5 5 0 000-10"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M17 30h14l-2 4H19l-2-4z"
-        fill="currentColor"
-        opacity="0.75"
-      />
-      <rect
-        x="16"
-        y="34"
-        width="16"
-        height="3"
-        rx="1.5"
-        fill="currentColor"
-        opacity="0.55"
-      />
-      <path
-        d="M24 16l1.5 2.5 3 .5-2 2 .5 3-3-1.5-3 1.5.5-3-2-2 3-.5z"
-        fill="currentColor"
-        opacity="0.35"
-      />
-    </svg>
   );
 }
 
@@ -284,5 +240,50 @@ function AchievementCard({ item }: { item: Achievement }) {
         </span>
       </div>
     </div>
+  );
+}
+
+function TrophyIcon({ className }: { className: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className={className}>
+      <path
+        d="M14 6h20v14a10 10 0 01-10 10 10 10 0 01-10-10V6z"
+        fill="currentColor"
+        opacity="0.85"
+      />
+      <path
+        d="M8 14a5 5 0 010-10"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M40 14a5 5 0 000-10"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M17 30h14l-2 4H19l-2-4z"
+        fill="currentColor"
+        opacity="0.75"
+      />
+      <rect
+        x="16"
+        y="34"
+        width="16"
+        height="3"
+        rx="1.5"
+        fill="currentColor"
+        opacity="0.55"
+      />
+      <path
+        d="M24 16l1.5 2.5 3 .5-2 2 .5 3-3-1.5-3 1.5.5-3-2-2 3-.5z"
+        fill="currentColor"
+        opacity="0.35"
+      />
+    </svg>
   );
 }

@@ -207,7 +207,7 @@ export default function CommentsDrawer({
             <form onSubmit={handleCommentSubmit} className="p-4 border-t border-white/10 bg-neutral-900/90 sticky bottom-0">
               <input
                 type="text"
-                placeholder="Your name (optional)"
+                placeholder="Your name"
                 value={newCommentName}
                 onChange={(e) => setNewCommentName(e.target.value)}
                 className="w-full p-2 mb-2 rounded-md bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:border-blue-500"
