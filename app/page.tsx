@@ -1,7 +1,6 @@
 import PortfolioScroll from "@/components/PortfolioScroll";
 import BentoGrid from "@/components/BentoGrid";
 import Testimonial from "@/components/Testimonial";
-import Achievements from "@/components/Achievements";
 import Stats from "@/components/Stats";
 import Footer from "@/components/Footer";
 import AboutReveal from "@/components/AboutReveal";
@@ -22,7 +21,6 @@ export default function Home() {
         <Testimonial />
         <GamesGrid />
         <PhotoboothGrid />
-        <Achievements />
         <Stats />
         <Footer />
       </div>

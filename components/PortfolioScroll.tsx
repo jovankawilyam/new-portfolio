@@ -275,7 +275,7 @@ function ScrollOverlays({ progress }: { progress: MotionValue<number> }) {
             JOVANKA
           </h1>
           <p className="mt-4 text-xl font-light tracking-widest text-amber-500 uppercase">
-            Frontend Developer & Data Analyst
+            Fullstack Web Developer & Data Analyst
           </p>
         </motion.div>
       </div>

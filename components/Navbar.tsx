@@ -6,12 +6,8 @@ import clsx from "clsx";
 import NotesModal from "./NotesModal";
 
 const menuItems = [
-  { title: "HOME", href: "#" },
-  { title: "ABOUT", href: "#about" },
-  { title: "PROJECTS", href: "#projects" },
-  { title: "EXPERIENCE", href: "#experience" },
-  { title: "CV", href: "https://personal-portofolio-jovanka.vercel.app/CV_Jovanka%20Wilyam_IBI%20Kesatuan.pdf" },
-  { title: "CONTACT", href: "#contact" },
+  { title: "HOME", href: "/" },
+  { title: "ACHIEVEMENTS", href: "/achievements" },
 ];
 
 const socialLinks = [
@@ -66,9 +62,11 @@ export default function Navbar() {
 
       {/* Logo (Fixed top left) */}
       <div className="fixed top-8 left-8 z-60 mix-blend-difference">
-        <h1 className="text-2xl font-black tracking-tighter text-white">
-          JOVANKA.
-        </h1>
+        <a href="/">
+          <h1 className="text-2xl font-black tracking-tighter text-white hover:text-amber-500 transition-colors">
+            JOVANKA.
+          </h1>
+        </a>
       </div>
 
       <AnimatePresence>
@@ -140,12 +138,7 @@ export default function Navbar() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.9, duration: 0.8 }}
               >
-                <h3 className="text-sm font-bold uppercase tracking-widest text-neutral-500 mb-4">
-                  Contact
-                </h3>
-                <p className="text-xl font-medium text-white">
-                  WhatsApp: +62 819 1188 3609
-                </p>
+                
                 <p className="text-xl font-medium text-white">
                   Bogor, Indonesia
                 </p>

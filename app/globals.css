@@ -17,3 +17,29 @@ body {
     text-wrap: balance;
   }
 }
+
+/* 3D Book Flip Animation Core */
+.perspective-book {
+  perspective: 2500px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.page-gradient-front {
+  background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 10%);
+}
+
+.page-gradient-back {
+  background: linear-gradient(to left, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 10%);
+}

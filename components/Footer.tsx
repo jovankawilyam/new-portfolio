@@ -18,14 +18,6 @@ export default function Footer() {
             </h2>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href="https://wa.me/6281911883609"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-amber-600 px-7 py-4 font-bold text-black transition hover:bg-white"
-              >
-                Chat WhatsApp
-              </a>
-              <a
                 href="https://github.com/jovankawilyam"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -66,14 +58,6 @@ export default function Footer() {
                 className="hover:text-amber-500 transition-colors"
               >
                 GITHUB
-              </a>
-              <a
-                href="https://wa.me/6281911883609"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-amber-500 transition-colors"
-              >
-                WHATSAPP
               </a>
             </div>
           </div>
