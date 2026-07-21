@@ -1,10 +1,11 @@
 import PortfolioScroll from "@/components/PortfolioScroll";
 import BentoGrid from "@/components/BentoGrid";
 import Testimonial from "@/components/Testimonial";
+import Achievements from "@/components/Achievements";
 import Stats from "@/components/Stats";
 import Footer from "@/components/Footer";
 import AboutReveal from "@/components/AboutReveal";
-import Achievements from "@/components/Achievements";
+
 import GamesGrid from "@/components/GamesGrid";
 import Navbar from "@/components/Navbar";
 import PhotoboothGrid from "@/components/PhotoboothGrid";

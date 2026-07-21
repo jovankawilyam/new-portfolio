@@ -142,6 +142,8 @@ export default function AboutReveal() {
             </div>
           </div>
 
+
+
           <Reveal>
             <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start">
               <a

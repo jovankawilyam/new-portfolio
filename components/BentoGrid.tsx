@@ -99,6 +99,15 @@ const projects: Project[] = [
       "A website for tracking and sending documents and packages, with a simple and modern interface.",
     isComingSoon: true,
   },
+  {
+    title: "Kasirku",
+    href: "https://kasirku-main.vercel.app/",
+    image: "/images/kasirku.png",
+    type: "POS",
+    tags: ["POS", "Product", "Web"],
+    description:
+      "A modern point-of-sale (POS) system that simplifies transaction management with a user-friendly interface and robust stock tracking capabilities.",
+  },
 ];
 
 function isExternalLink(href: string) {

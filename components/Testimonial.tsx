@@ -4,6 +4,13 @@ import Reveal from "@/components/Reveal";
 
 const experiences = [
   {
+    role: "Fullstack Web Developer",
+    place: "Freelance",
+    period: "2025 - Now",
+    description:
+      "Freelance fullstack web developer with experience in building responsive and user-friendly web applications.",
+  },
+  {
     role: "Head of Human Resource Development",
     place: "Himpunan Mahasiswa Sistem Informasi",
     period: "2025 - 2026",

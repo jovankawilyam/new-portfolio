@@ -77,6 +77,11 @@ export default function Footer() {
               </a>
             </div>
           </div>
+          <div className="flex flex-col-reverse justify-between gap-10 md:flex-row md:items-end">
+            <p className="gap-6 text-neutral-200 mt-8 md:mt-0 mb-8 font-medium md:justify-end">
+              Built with passion by Jovanka Wilyam | All rights reserved © 2025
+            </p>
+          </div>
         </div>
       </Reveal>
     </footer>
