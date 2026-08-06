@@ -51,10 +51,10 @@ export default function Stats() {
     <section className="bg-neutral-950 relative z-1 py-24 border-t border-white/5">
       <div className="mx-auto max-w-7xl px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
         {[
-          { label: "Projects", value: "20+" },
+          { label: "Projects", value: "25+" },
           { label: "Years Exp", value: "2+" },
-          { label: "Clients", value: "5+" },
-          { label: "Achievements", value: "11+" },
+          { label: "Clients", value: "6+" },
+          { label: "Achievements", value: "12+" },
         ].map((stat, i) => (
           <Reveal key={i} delay={i * 0.1}>
             <div>

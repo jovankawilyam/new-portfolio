@@ -91,13 +91,13 @@ const projects: Project[] = [
   },
   {
     title: "Doclang Boba",
-    href: "https://doclang-boba-app-production.up.railway.app/",
+    href: "https://doclang-boba-next.vercel.app/",
     image: "/images/doclangboba.png",
     type: "Website",
     tags: ["Website", "Tracking", "Documents"],
     description:
       "A website for tracking and sending documents and packages, with a simple and modern interface.",
-    isComingSoon: true,
+    isComingSoon: false,
   },
   {
     title: "Kasirku",
@@ -107,6 +107,56 @@ const projects: Project[] = [
     tags: ["POS", "Product", "Web"],
     description:
       "A modern point-of-sale (POS) system that simplifies transaction management with a user-friendly interface and robust stock tracking capabilities.",
+  },
+  {
+    title: "Perputakaan Kota Bogor (Client)",
+    href: "#",
+    image: "/images/perpustakaan.png",
+    type: "Website",
+    tags: ["Website", "Client", "Web"],
+    description:
+      "A modern website for tracking books and users, with a simple and user-friendly interface.",
+    isComingSoon: false,
+  },
+  {
+    title: "Toko Baju (Client)",
+    href: "#",
+    image: "/images/toko-baju.png",
+    type: "Website",
+    tags: ["Website", "Client", "Web"],
+    description:
+      "A modern website for clothing stores that simplifies transaction management with a user-friendly interface and robust stock tracking capabilities.",
+    isComingSoon: false,
+  },
+  {
+    title: "UMKM Surya Kencana (Client)",
+    href: "#",
+    image: "/images/umkm-surken.png",
+    type: "Website",
+    tags: ["Website", "Client", "Web"],
+    description:
+      "A modern website for UMKM Surya Kencana that simplifies transaction management with a user-friendly interface and robust stock tracking capabilities.",
+    isComingSoon: false,
+  },
+  {
+    title: "Toko Sembako (Client)",
+    href: "#",
+    image: "/images/toko-sembako.png",
+    type: "Website",
+    tags: ["Website", "Client", "Web"],
+    description:
+      "A modern website for UMKM Toko Sembako that simplifies transaction management with a user-friendly interface and robust stock tracking capabilities.",
+    isComingSoon: false,
+  },
+  {
+    title: "Belanja Cerdas (Client)",
+    href: "#",
+    image: "/images/belanja-cerdas.png",
+    type: "Website",
+    tags: ["Website", "Client", "Web"],
+    description:
+      "A modern website for smart shopping that simplifies transaction management with a user-friendly interface and robust stock tracking capabilities.",
+    isComingSoon: false,
   },
 ];
 

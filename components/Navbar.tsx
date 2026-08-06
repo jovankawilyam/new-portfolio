@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import clsx from "clsx";
 import NotesModal from "./NotesModal";
@@ -62,11 +63,11 @@ export default function Navbar() {
 
       {/* Logo (Fixed top left) */}
       <div className="fixed top-8 left-8 z-60 mix-blend-difference">
-        <a href="/">
-          <h1 className="text-2xl font-black tracking-tighter text-white hover:text-amber-500 transition-colors">
+        <Link href="/">
+          <h1 className="text-2xl font-black tracking-tighter text-white transition-colors hover:text-amber-500">
             JOVANKA.
           </h1>
-        </a>
+        </Link>
       </div>
 
       <AnimatePresence>
