@@ -110,7 +110,7 @@ const projects: Project[] = [
   },
   {
     title: "Perputakaan Kota Bogor (Client)",
-    href: "#",
+    href: "https://perpustakaan-bgr.vercel.app/",
     image: "/images/perpustakaan.png",
     type: "Website",
     tags: ["Website", "Client", "Web"],
@@ -120,7 +120,7 @@ const projects: Project[] = [
   },
   {
     title: "Toko Baju (Client)",
-    href: "#",
+    href: "https://toko-baju-liart.vercel.app/",
     image: "/images/toko-baju.png",
     type: "Website",
     tags: ["Website", "Client", "Web"],
@@ -130,7 +130,7 @@ const projects: Project[] = [
   },
   {
     title: "UMKM Surya Kencana (Client)",
-    href: "#",
+    href: "https://umkm-surken.vercel.app/",
     image: "/images/umkm-surken.png",
     type: "Website",
     tags: ["Website", "Client", "Web"],
@@ -140,7 +140,7 @@ const projects: Project[] = [
   },
   {
     title: "Toko Sembako (Client)",
-    href: "#",
+    href: "https://toko-sembako-berkah-jaya.vercel.app/kasir",
     image: "/images/toko-sembako.png",
     type: "Website",
     tags: ["Website", "Client", "Web"],
@@ -150,7 +150,7 @@ const projects: Project[] = [
   },
   {
     title: "Belanja Cerdas (Client)",
-    href: "#",
+    href: "https://belanja-cerdas.vercel.app/",
     image: "/images/belanja-cerdas.png",
     type: "Website",
     tags: ["Website", "Client", "Web"],
