@@ -105,7 +105,7 @@ const games: Game[] = [
     tags: ["Game", "Word", "Web", "2P"],
     description:
       "Adu Kata is a fun and addictive word game that will test your vocabulary and speed!",
-    version: "1.0",
+    version: "2.0",
     isComingSoon: false,
   },
 ];
